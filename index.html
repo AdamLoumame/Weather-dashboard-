@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="normalize.css" />
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+    <!-- icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/ab3056bc7e.js" crossorigin="anonymous"></script>
+    <title>Weather DashBoard</title>
+  </head>
+  <body>
+    <!-- header -->
+    <header>
+      <div class="left-part">
+        <div class="icons">
+          <a href="" class="more"><i class="fa-solid fa-house"></i></a>
+          <a href="" class="more"><i class="fa-solid fa-bell"></i></a>
+          <div class="location">
+            <i class="fa-solid fa-location-dot"></i>
+            <span class="loc-name">Seattle</span>
+          </div>
+        </div>
+        <div class="search">
+          <i class="material-icons search-button">radio_button_unchecked</i>
+          <input type="text" placeholder="Search City..." class="search-bar"/>
+        </div>
+      </div>
+      <div class="right-part">
+        <div class="mode dark">
+          <i class="light material-icons" style="margin-left: -2px">wb_sunny</i>
+          <i class="dark material-icons active" style="margin-right: -3px">bedtime</i>
+        </div>
+        <div class="user-image">
+          <img src="images/avatar.jpg" alt="" />
+        </div>
+      </div>
+    </header>
+
+    <!-- midle part -->
+    <div class="midle">
+      <div class="left-part">
+        <div class="info">
+          <div class="dates">
+            <span class="date today">Today</span>
+            <span class="date tomorrow">Tomorrow</span>
+            <span class="date week active">Next 7 days</span>
+          </div>
+          <div class="options forecast">
+            <span class="option left active">Forecast</span>
+            <span class="option right">Air quality</span>
+          </div>
+        </div>
+        <div class="main today"></div>
+        <div class="main tomorrow"></div>
+        <!-- week -->
+        <div class="main week active"></div>
+      </div>
+
+      <div class="right-part">
+        <div class="diagram"></div>
+      </div>
+    </div>
+
+    <script type="module" src="api.js"></script>
+    <script type="module" src="midle.js"></script>
+    <script src="lower.js"></script>
+    <script type="module" src="modes.js"></script>
+    <script type="module" src="search.js"></script>
+  </body>
+</html>

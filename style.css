@@ -1,0 +1,454 @@
+:root {
+  --number-font: "Rubik", sans-serif;
+  --main-text-color: white;
+  --sec-text-color: #6e6e70;
+  --bg-color: #111015;
+  --sec-bg-color: #1e1e1e;
+  --icon-bg-color: #232325;
+  --info-color: #bbd7ec;
+  --border-radius: 2rem;
+  --border-color:#292929;
+}
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
+input:focus {
+  outline: none;
+}
+input {
+  caret-color: var(--info-color);
+}
+body {
+  font-family: "Mulish", serif;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 20px;
+  background-color: var(--bg-color) !important;
+  color: var(--main-text-color) !important;
+
+}
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+a {
+  text-decoration: none;
+}
+
+/* header */
+header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header .left-part {
+  flex-basis: 75%;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4.8rem;
+}
+header .left-part .icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header .left-part .icons a:first-of-type {
+  margin-right: 1.5rem;
+}
+header .left-part .icons a {
+  background-color: var(--icon-bg-color);
+  color: var(--main-text-color);
+  font-size: 1rem;
+  border-radius: var(--border-radius);
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+header .left-part .icons a:last-of-type::before {
+  content: "";
+  position: absolute;
+  top: 35%;
+  right: 30%;
+  transform: translateY(-50%);
+  height: 4px;
+  width: 4px;
+  background-color: #f41c1d;
+  border-radius: var(--border-radius);
+}
+header .left-part .location {
+  height: fit-content;
+  font-size: 1rem;
+  margin: auto;
+  margin-left: 2rem;
+}
+header .left-part .location i {
+  margin-right: 0.6rem;
+}
+header .left-part .location .loc-name {
+  letter-spacing: 1.5px;
+  font-weight: 400;
+}
+header .left-part .search {
+  flex-basis: 55%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--sec-bg-color);
+  height: 90%;
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius);
+}
+header .left-part .search i {
+  cursor: pointer;
+  position: relative;
+}
+header .left-part .search i::after {
+  content: "";
+  position: absolute;
+  bottom: 1px;
+  right: 2px;
+  height: 4px;
+  width: 2px;
+  background-color: var(--main-text-color);
+  rotate: -45deg;
+  border-radius: var(--border-radius);
+}
+header .left-part .search .search-bar  {
+  background-color: var(--sec-bg-color);
+  border: none;
+  width: 100%;
+  color: var(--main-text-color);
+  margin-left: 1rem;
+}
+
+header .right-part {
+  flex-basis: 25%;
+  padding: 10px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  height: 4rem;
+}
+header .right-part .mode {
+  margin-right: 1.5rem;
+  width: 6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 2rem;
+  background-color: var(--sec-bg-color);
+  height: 3rem;
+  border-radius: var(--border-radius);
+  padding: 0 0.8rem;
+  border:2px solid var(--border-color);
+  position: relative;
+}
+header .right-part .mode::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translatey(-50%);
+  left: 0;
+  background-color: var(--info-color);
+  width: 50%;
+  height: 100%;
+  border-radius: var(--border-radius);
+  transition: 0.3s;
+}
+header .right-part .light::before {
+  left: 0;
+}
+header .right-part .dark::before {
+  left: 50%;
+}
+header .right-part .mode i {
+  transition: 0.3s;
+  z-index: 1;
+  cursor: pointer;
+  color: var(--main-text-color);
+}
+header .right-part .mode .active {
+  color: var(--bg-color);
+}
+header .right-part .user-image img {
+  height: 3rem;
+  width: 3rem;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* midle */
+.midle{
+  padding-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.midle .left-part{
+  flex-basis: 75%;
+  padding: 10px;
+}
+.midle .left-part .info{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.midle .left-part .info .dates{
+  display: flex;
+  width: 21rem;
+  justify-content: space-between;
+}
+.midle .left-part .info .dates .date{
+  font-size: 1.3rem;
+  color: var(--sec-text-color);
+  cursor: pointer;
+  transition: .3s;
+}
+.midle .left-part .info .dates .active{
+  color: var(--main-text-color);
+}
+.midle .left-part .info .options{
+  display: flex;
+  align-items: center;
+  background-color: var(--sec-bg-color);
+  border-radius: var(--border-radius);
+  letter-spacing: .2px;
+  position: relative;
+  padding: 0.8rem 2rem;
+  width: fit-content;
+}
+.midle .left-part .info .options::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  background-color: var(--info-color);
+  border-radius: var(--border-radius);
+  width: 50%;
+  height: 100%;
+  transition: .3s;
+}
+.midle .left-part .info .forecast::before{
+  left: 0;
+}
+.midle .left-part .info .air::before{
+  left: 50%;
+}
+.midle .left-part .info .options .option{
+  font-size: .8rem;
+  z-index: 2;
+  transition: .3s;
+  cursor: pointer;
+}
+.midle .left-part .info .options .left{
+  margin-right: 1.6rem;
+}
+.midle .left-part .info .options .right{
+  margin-left: 2.6rem;
+}
+.midle .left-part .info .options .active{
+  color: var(--bg-color);
+  font-weight: 600;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* main */
+.midle .left-part .main{
+  height: 13rem;
+  margin-top: 20px;
+  display: none;
+}
+.midle .left-part .main.active{
+  display: block;
+}
+/* 7 days ahead */
+.midle .left-part .main.week{
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.midle .left-part .main.week .day{
+  background-color: var(--sec-bg-color);
+  padding: 1.2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  border-radius: var(--border-radius);
+  flex-basis: 12.3%;
+  width: 12.3%;
+  transition: .3s;
+  cursor: pointer;
+  position: relative;
+}
+.midle .left-part .main.week .day .abr{
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #323234;
+  font-size: 1.2rem;
+}
+.midle .left-part .main.week .day .weather-img{
+  width: 4.2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-40%);
+}
+.midle .left-part .main.week .day .temp{
+  font-size: 1.8rem; 
+  font-family: var(--number-font);
+  transition: .3s;
+}
+/* active day */
+.midle .left-part .main.week .day.active{
+  flex-basis: 26.2%;
+  width: 26.2%;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  padding: 0;
+}
+.midle .left-part .main.week .day.active .top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #aecadf;
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-bottom: 1rme;
+}
+.midle .left-part .main.week .day.active .top h3{
+  font-weight: 700;
+  margin: 0;
+  color: var(--bg-color);
+  font-size: 1.2rem;
+}
+.midle .left-part .main.week .day.active .top .month{
+  font-family: var(--number-font);
+  color: var(--bg-color);
+  font-size: .7rem;
+  width: 3rem;
+  font-weight: bold;
+  margin-top: 5px;
+}
+.midle .left-part .main.week .day.active .bottom{
+  background-color: var(--info-color);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem 1rem 1.2rem 1.2rem;
+}
+.midle .left-part .main.week .day.active .bottom .left{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.midle .left-part .main.week .day.active .bottom .left .temp{
+  color: var(--bg-color);
+  width: fit-content;
+  font-size: 3rem;
+  font-weight: bold;
+}
+.midle .left-part .main.week .day.active .bottom .info {
+  display: flex;
+  flex-direction: column;
+}
+.midle .left-part .main.week .day.active .bottom .info p{
+  font-size: 0.6rem;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+  margin: .2rem 0;
+  color: var(--bg-color);
+  font-weight: 100;
+}
+.midle .left-part .main.week .day.active .bottom .info p span{
+  font-weight: bold;
+}
+.midle .left-part .main.week .day.active .bottom .rigth{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.midle .left-part .main.week .day.active .bottom .rigth .weather-img{
+  width: 5rem;
+  position: absolute;
+  top: 2rem;
+  right: 1rem;
+  transform: translate(-50%,-40%);
+}
+
+
+
+
+
+
+
+
+
+.midle .right-part{
+  flex-basis: 25%;
+  padding: 20px;
+}
