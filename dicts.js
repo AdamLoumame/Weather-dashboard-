@@ -40,6 +40,7 @@ export const weatherConditions = {
     1213: "/images/weather/dark mode/snow.png",
     1216: "/images/weather/dark mode/snow.png",
     1225: "/images/weather/dark mode/snow.png",
+    1258: "/images/weather/dark mode/snow.png",
   },
   light: {
     1000: "/images/weather/white mode/clear or hot.png",
@@ -82,5 +83,6 @@ export const weatherConditions = {
     1213: "/images/weather/white mode/snow.png", 
     1216: "/images/weather/white mode/snow.png",
     1225: "/images/weather/white mode/snow.png",
+    1258: "/images/weather/white mode/snow.png",
   },
 }

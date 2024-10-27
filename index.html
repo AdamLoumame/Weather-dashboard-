@@ -6,12 +6,13 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="normalize.css" />
     <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
 
     <!-- icons -->
+    <link rel="icon" href="/images/weather/big images/ghost.png">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/ab3056bc7e.js" crossorigin="anonymous"></script>
     <title>Weather DashBoard</title>
@@ -25,12 +26,12 @@
           <a href="" class="more"><i class="fa-solid fa-bell"></i></a>
           <div class="location">
             <i class="fa-solid fa-location-dot"></i>
-            <span class="loc-name">Seattle</span>
+            <span class="loc-name"><span></span></span>
           </div>
         </div>
         <div class="search">
           <i class="material-icons search-button">radio_button_unchecked</i>
-          <input type="text" placeholder="Search City..." class="search-bar"/>
+          <input type="text" placeholder="Search City..." class="search-bar" />
         </div>
       </div>
       <div class="right-part">
@@ -45,6 +46,25 @@
     </header>
 
     <!-- midle part -->
+    <div class="error-404">
+      <div class="container">
+        <img src="./images/weather/big images/sun.png" alt="" class="sun" />
+        <img src="./images/weather/big images/cloud.png" alt="" class="cloud" />
+        <div class="fours">
+          <span>4</span>
+          <span>0</span>
+          <span>4</span>
+        </div>
+        <p class="message"><span>Oops</span><span>...</span> <span>sorry</span> <span>page</span> <span>not</span> <span>found</span></p>
+      </div>
+    </div>
+    <div class="loader">
+      <div class="container">
+        <span class="droplet"></span>
+        <span class="droplet"></span>
+        <span class="droplet"></span>
+			</div>
+    </div>
     <div class="midle">
       <div class="left-part">
         <div class="info">
@@ -62,6 +82,8 @@
         <div class="main tomorrow"></div>
         <!-- week -->
         <div class="main week active"></div>
+        <!-- air quality -->
+        <div class="main-air">air</div>
       </div>
 
       <div class="right-part">
@@ -73,6 +95,5 @@
     <script type="module" src="midle.js"></script>
     <script src="lower.js"></script>
     <script type="module" src="modes.js"></script>
-    <script type="module" src="search.js"></script>
   </body>
 </html>
