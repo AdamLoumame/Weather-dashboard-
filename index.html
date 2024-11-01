@@ -1,99 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="normalize.css" />
-    <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="normalize.css" />
+		<!-- font -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
 
-    <!-- icons -->
-    <link rel="icon" href="/images/weather/big images/ghost.png">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/ab3056bc7e.js" crossorigin="anonymous"></script>
-    <title>Weather DashBoard</title>
-  </head>
-  <body>
-    <!-- header -->
-    <header>
-      <div class="left-part">
-        <div class="icons">
-          <a href="" class="more"><i class="fa-solid fa-house"></i></a>
-          <a href="" class="more"><i class="fa-solid fa-bell"></i></a>
-          <div class="location">
-            <i class="fa-solid fa-location-dot"></i>
-            <span class="loc-name"><span></span></span>
-          </div>
-        </div>
-        <div class="search">
-          <i class="material-icons search-button">radio_button_unchecked</i>
-          <input type="text" placeholder="Search City..." class="search-bar" />
-        </div>
-      </div>
-      <div class="right-part">
-        <div class="mode dark">
-          <i class="light material-icons" style="margin-left: -2px">wb_sunny</i>
-          <i class="dark material-icons active" style="margin-right: -3px">bedtime</i>
-        </div>
-        <div class="user-image">
-          <img src="images/avatar.jpg" alt="" />
-        </div>
-      </div>
-    </header>
-
-    <!-- midle part -->
-    <div class="error-404">
-      <div class="container">
-        <img src="./images/weather/big images/sun.png" alt="" class="sun" />
-        <img src="./images/weather/big images/cloud.png" alt="" class="cloud" />
-        <div class="fours">
-          <span>4</span>
-          <span>0</span>
-          <span>4</span>
-        </div>
-        <p class="message"><span>Oops</span><span>...</span> <span>sorry</span> <span>page</span> <span>not</span> <span>found</span></p>
-      </div>
-    </div>
-    <div class="loader">
-      <div class="container">
-        <span class="droplet"></span>
-        <span class="droplet"></span>
-        <span class="droplet"></span>
+		<!-- icons -->
+		<link rel="icon" href="/images/weather/big images/ghost.png" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+		<script src="https://kit.fontawesome.com/ab3056bc7e.js" crossorigin="anonymous"></script>
+		<title>Weather DashBoard</title>
+	</head>
+	<body>
+		<!-- header -->
+		<header>
+			<div class="left-part">
+				<div class="icons">
+					<a href="" class="more"><i class="fa-solid fa-house"></i></a>
+					<a href="" class="more"><i class="fa-solid fa-bell"></i></a>
+					<div class="location">
+						<i class="fa-solid fa-location-dot"></i>
+						<span class="loc-name"><span></span></span>
+					</div>
+				</div>
+				<div class="search">
+					<i class="material-icons search-button">radio_button_unchecked</i>
+					<input type="text" placeholder="Search City..." class="search-bar" />
+				</div>
 			</div>
-    </div>
-    <div class="midle">
-      <div class="left-part">
-        <div class="info">
-          <div class="dates">
-            <span class="date today">Today</span>
-            <span class="date tomorrow">Tomorrow</span>
-            <span class="date week active">Next 7 days</span>
-          </div>
-          <div class="options forecast">
-            <span class="option left active">Forecast</span>
-            <span class="option right">Air quality</span>
-          </div>
-        </div>
-        <div class="main today"></div>
-        <div class="main tomorrow"></div>
-        <!-- week -->
-        <div class="main week active"></div>
-        <!-- air quality -->
-        <div class="main-air">air</div>
-      </div>
+			<div class="right-part">
+				<div class="mode dark">
+					<i class="light material-icons" style="margin-left: -2px">wb_sunny</i>
+					<i class="dark material-icons active" style="margin-right: -3px">bedtime</i>
+				</div>
+				<div class="user-image">
+					<img src="images/avatar.jpg" alt="" />
+				</div>
+			</div>
+		</header>
 
-      <div class="right-part">
-        <div class="diagram"></div>
-      </div>
-    </div>
+		<!-- midle part -->
+		<div class="error-404">
+			<div class="container">
+				<img src="./images/weather/big images/sun.png" alt="" class="sun" />
+				<img src="./images/weather/big images/dark cloud.png" alt="" class="cloud" />
+				<div class="fours">
+					<span>4</span>
+					<span>0</span>
+					<span>4</span>
+				</div>
+				<p class="message"><span>Oops</span><span>...</span> <span>sorry</span> <span>page</span> <span>not</span> <span>found</span></p>
+			</div>
+		</div>
+		<div class="loader">
+			<div class="container">
+				<span class="droplet"></span>
+				<span class="droplet"></span>
+				<span class="droplet"></span>
+			</div>
+		</div>
+		<div class="midle">
+			<div class="left-part">
+				<div class="info">
+					<div class="dates">
+						<span class="date today">Today</span>
+						<span class="date tomorrow">Tomorrow</span>
+						<span class="date week active">Next 7 days</span>
+					</div>
+					<div class="options forecast">
+						<span class="option left active">Forecast</span>
+						<span class="option right">Air quality</span>
+					</div>
+				</div>
+				<div class="main today">
+					<div class="night-bg"></div>
+				</div>
+				<div class="main tomorrow"></div>
+				<!-- week -->
+				<div class="main week active"></div>
+				<!-- air quality -->
+				<div class="main-air">
+					<div class="aqi">
+						<div class="aqi-index">
+							<div class="image">
+								<img src="" alt="" class="aqi-image" />
+							</div>
+							<div class="infos">
+								<span class="number"></span>
+								<span class="description"></span>
+							</div>
+							<span class="text">AQI</span>
+						</div>
+						<div class="UV-forecast">
+							<div class="box">
+								<div class="bar"><span class="progress"></span></div>
+								<span class="text"><span class="value"></span><span></span></span>
+							</div>
+							<div class="box">
+								<div class="bar"><span class="progress"></span></div>
+								<span class="text"><span class="value"></span><span></span></span>
+							</div>
+							<div class="box">
+								<div class="bar"><span class="progress"></span></div>
+								<span class="text"><span class="value"></span><span></span></span>
+							</div>
+							<div class="title">UV idnex Forecast</div>
+						</div>
+					</div>
+					<div class="infos">
+						<div class="col">
+							<div class="box">
+								<div class="number"></div>
+								<div class="info-container">
+									<canvas class="info PM2_5"></canvas>
+								</div>
+								<span>PM2.5 µg/m³</span>
+							</div>
+							<div class="box">
+								<div class="number"></div>
+								<div class="info-container">
+									<canvas class="info PM10"></canvas>
+								</div>
+								<span>PM10 µg/m³</span>
+							</div>
+						</div>
+						<div class="col">
+							<div class="box">
+								<div class="number"></div>
+								<div class="info-container">
+									<canvas class="info CO"></canvas>
+								</div>
+								<span>CO µg/m³</span>
+							</div>
+							<div class="box">
+								<div class="number"></div>
+								<div class="info-container">
+									<canvas class="info O3"></canvas>
+								</div>
+								<span>O₃ µg/m³</span>
+							</div>
+						</div>
+						<div class="col">
+							<div class="box">
+								<div class="number"></div>
+								<div class="info-container">
+									<canvas class="info NO2"></canvas>
+								</div>
+								<span>NO₂ µg/m³</span>
+							</div>
+							<div class="box">
+								<div class="number"></div>
+								<div class="info-container">
+									<canvas class="info SO2"></canvas>
+								</div>
+								<span>SO₂ µg/m³</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-    <script type="module" src="api.js"></script>
-    <script type="module" src="midle.js"></script>
-    <script src="lower.js"></script>
-    <script type="module" src="modes.js"></script>
-  </body>
+			<div class="right-part">
+				<div class="diagram"></div>
+			</div>
+		</div>
+
+		<!-- CNDS -->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+		<!-- modules -->
+		<script type="module" src="api.js"></script>
+		<script type="module" src="midle.js"></script>
+		<script src="lower.js"></script>
+		<script type="module" src="modes.js"></script>
+	</body>
 </html>

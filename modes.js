@@ -2,13 +2,16 @@
 import {makeActive , resetBoxes} from './midle.js'
 // all the changes that occures while changing mode 
 function applyChanges(){
+    // week changes
     let lastActive = document.querySelector(".day.active")
     if (document.querySelector(".day")){
         resetBoxes()
         if (lastActive){
             makeActive(lastActive)
         }
-    }
+    }    
+    // today / tomorrow changes
+    
 }
 
 // applying mode from localStorage if there is  
@@ -32,11 +35,11 @@ document.querySelectorAll(".mode i").forEach(mode => {
 })
 // activate dark mode function
 function dark(){
-    // acrive class to the clicked
+    // active class to the clicked
     document.querySelectorAll(".mode i").forEach(mode => mode.classList.remove("active"))
     document.querySelector(".mode .dark").classList.add("active")
+    
     // controle the toggle position ( using ::before )
-
     document.querySelector(".mode").classList.remove("light")
     document.querySelector(".mode").classList.add("dark")
 
@@ -50,12 +53,16 @@ function dark(){
     localStorage.setItem("mode","dark")
 
     applyChanges()
+
+    // error 404 changes
+    document.querySelector(".cloud").src = "/images/weather/big images/dark cloud.png"
 }
 // activate light mode function
 function light(){
-    // acrive class to the clicked
+    // active class to the clicked
     document.querySelectorAll(".mode i").forEach(mode => mode.classList.remove("active"))
     document.querySelector(".mode .light").classList.add("active")
+
     // controle the toggle position ( using ::before )
     document.querySelector(".mode").classList.remove("dark")
     document.querySelector(".mode").classList.add("light")
@@ -71,4 +78,6 @@ function light(){
     localStorage.setItem("mode","light")
 
     applyChanges()
+
+    document.querySelector(".cloud").src = "/images/weather/big images/light cloud.png"
 }

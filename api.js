@@ -38,11 +38,9 @@ function showLoader(){
     document.querySelector(".loader").style.display = "block"
 	document.querySelector(".error-404").style.display = "none"
 	document.querySelector(".midle").style.display = "none"
-	document.querySelector(".midle .info").style.display = "none"
 	document.querySelector("header .left-part .location .loc-name").innerHTML = `Loading...`
 }
 function hideLoader(){
     document.querySelector(".loader").style.display = "none"
 	document.querySelector(".midle").style.display = "flex"
-	document.querySelector(".midle .info").style.display = "flex"
 }
