@@ -1,4 +1,4 @@
-// Air or Forecast
+// switch between Air / Forecast
 let options = document.querySelectorAll(".option")
 options.forEach(option => {
 	option.addEventListener("click", _ => {
@@ -36,7 +36,7 @@ import {datetoName, getBoxData, airColor, uvColor} from "./utilities.js"
 import {weatherConditions, aqiImage, maxAirValues} from "./dicts.js"
 import {getData} from "./api.js" // main fetching function
 // default
-let data = await getData("marrakech") // default data that will be showed first to the user
+let data = await getData("japan") // default data that will be showed first to the user
 document.querySelector("header .left-part .location .loc-name").innerHTML = `${data.location.name}, <span>${data.location.country}</span>`
 
 // search listeners
@@ -67,41 +67,59 @@ async function OnSearch() {
 	airData = data.current.air_quality // update data
 	updateAir() // update the air values
 	// today changes
-	showDay(document.querySelector(".main.today"), data.current)
+	showDay(document.querySelector(".main.today"), data.current, data.current)
 	// tommorow changes
-	showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day)
+	showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
+	// convert today/tomorrow temps like this : C <=> F
+	allConvertable()
 	// changing to a new name city on the DOM
 	document.querySelector("header .left-part .location .loc-name").innerHTML = `${data.location.name}, <span>${data.location.country}</span>`
 }
 ////////////////         Today + Tommorow          ///////////////
-function showDay(box, data) {
-	// infos show to the user
-	let temp = data.temp_c ? data.temp_c : data.avgtemp_c
+function showDay(box, data, data2) {
+	// infos to show to the user for data ( left / right )
+	let temp // getting correct temp unit ( value )
+	let tempClass
+	if (box.children.length > 0 && box.children[2].children[0].classList.contains("F")) {
+		temp = Math.round(data.temp_f ? data.temp_f : data.avgtemp_f) + " °F"
+		tempClass = "F"
+	} else {
+		temp = Math.round(data.temp_c ? data.temp_c : data.avgtemp_c) + " °C"
+		tempClass = "C"
+	}
 	let vis = data.vis_km ? data.vis_km : data.avgvis_km
 	let humidity = data.humidity ? data.humidity : data.avghumidity
 	let uv = data.uv
 	let wind = data.wind_kph ? data.wind_kph : data.maxwind_kph
 	let text = data.condition.text
+
+	// infos to show to the user for data2 ( class : more )
+	let dateNumbers = data2.last_updated ? data2.last_updated : data2.time
+	let date = `${datetoName(dateNumbers.slice(0, 10))} ${new Date(dateNumbers.slice(5, 7)).toLocaleString("en", {month: "short"})} ${dateNumbers.slice(0,4)}` 
 	// setting the img based on the theme / mode and text
 	let imagePack = document.querySelector(".mode").classList[1] // dark or light
-	let img
+	let img = weatherConditions[imagePack][data.condition.code]
 	if (data.condition.code === 1000) {
 		if (data.is_day) {
 			img = "/images/weather/big images/sun.png"
-		} else {
+		} else if (data.is_day === 0) {
 			img = "/images/weather/simboles/Group 1214.png"
 			text = "Clear"
 		}
-	} else if ((data.condition.code === 1003 || data.condition.code === 1006 || data.condition.code === 1204) && !data.is_day) {
+	} else if ((data.condition.code === 1003 || data.condition.code === 1006 || data.condition.code === 1204) && data.is_day === 0) {
 		if (imagePack === "dark") {
 			img = "/images/weather/dark mode/night/Group 5.png"
 		} else {
 			img = "/images/weather/white mode/night/Group 5.png"
 		}
-	} else {
-		img = weatherConditions[imagePack][data.condition.code]
 	}
-
+	// setting vis img
+	let visImg
+	if (data.is_day === undefined) {
+		visImg = "/images/weather/big images/vis2.png"
+	} else {
+		visImg = "/images/weather/big images/vis.png"
+	}
 	box.innerHTML = `
 					<div class="day-bg">
 						<img src="/images/weather/big images/sun.png" class="sun">
@@ -109,29 +127,50 @@ function showDay(box, data) {
 						<div class="wave1"></div>
 						<div class="wave2"></div>
 					</div>
-					<div class="night-bg"></div>
+					<div class="night-bg">
+						<img src="/images/weather/big images/moon.png" alt="" class="moon">
+					</div>
 					<div class="left">
-						<div class="temp">${Math.round(temp)} °C</div>
+						<div class="temperature ${tempClass}">${temp}</div>
 						<div class="infos">
 							<div class="box humidity">
 								<img src="/images/weather/big images/wind.png" alt="" class="icon">
-								<span class="value">${humidity}%</span>
+								<span class="value">${Math.round(humidity)} %</span>
 								<span class="text">Humidity</span>
 							</div>
 							<div class="box vis">
-								<img src="/images/weather/big images/vis.png" alt="" class="icon">
-								<span class="value">${vis}Km/h</span>
+								<img src="${visImg}" alt="" class="icon">
+								<span class="value">${Math.round(vis)} Km/h</span>
 								<span class="text">Visibility</span>
 							</div>
 							<div class="box uv">
 								<img src="/images/weather/big images/uv.png" alt="" class="icon">
-								<span class="value">${uv}</span>
+								<span class="value">${Math.round(uv)}</span>
 								<span class="text">Ultraviolet</span>
 							</div>
 							<div class="box wind">
 								<img src="/images/weather/simboles/wind.png" alt="" class="icon">
-								<span class="value">${wind}Km/h</span>
+								<span class="value">${Math.round(wind)} Km/h</span>
 								<span class="text">Wind Speed</span>
+							</div>
+						</div>
+					</div>
+					<div class="more">
+						<div class="Date">${date}</div>
+						<div class="details">
+							<div class="sec">
+								<div class="gust_Kph">gust_Kph : <span class="value">${Math.round(data2.gust_kph)} Km/h</span></div>
+								<div class="gust_mph">gust_mph : <span class="value">${Math.round(data2.gust_mph)} mph</span></div>
+								<div class="pressure_mb">pressure_mb : <span class="value">${Math.round(data2.pressure_mb)} MB</span></div>
+								<div class="pressure_in">pressure_in : <span class="value">${Math.round(data2.pressure_in)} in</span></div>
+								<div class="dewpoint">dewpoint : <span class="value C">${Math.round(data2.dewpoint_c)} °C</span></div>
+							</div>
+							<div class="sec">
+								<div class="heatindex">heatindex : <span class="value C">${Math.round(data2.heatindex_c)} °C</span></div>
+								<div class="feelslike">feelslike : <span class="value C">${Math.round(data2.feelslike_c)} °C</span></div>
+								<div class="windchill">windchill : <span class="value C">${Math.round(data2.windchill_c)} °C</span></div>
+								<div class="precip_in">precip_in : <span class="value">${Math.round(data2.precip_in)} in</span></div>
+								<div class="precip_mm">precip_mm : <span class="value">${Math.round(data2.precip_mm)} mm</span></div>
 							</div>
 						</div>
 					</div>
@@ -142,23 +181,71 @@ function showDay(box, data) {
 						</div>
 					</div> `
 	// day / night chages
-	dayChanges(box,data.is_day)
+	if (data.is_day !== undefined) {
+		dayChanges(box, data.is_day)
+	}
+
+	// creating and placing stars randomly
+	for (let i = 0; i < 3; i++) {
+		let star = document.createElement("img")
+		star.src = "/images/weather/big images/star.png"
+		star.classList.add("star")
+		document.querySelector(".night-bg").appendChild(star)
+	}
+	let stars = document.querySelectorAll(".star")
+	stars.forEach(star => {
+		Object.assign(star.style, {
+			width: `${Math.round(Math.random() * 2)}rem`,
+			top: `${Math.random() * 80}%`,
+			left: `${Math.random() * 80 + 60}%`,
+			rotate: `${Math.random() * 45}deg`,
+		})
+	})
 }
-// default today / tommorow
-showDay(document.querySelector(".main.today"), data.current)
-showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day)
-export function dayChanges(box,isDay){
-	if (isDay){
+// change the theme of the day according to the day / night
+function dayChanges(box, isDay) {
+	if (isDay) {
 		box.style.backgroundColor = "#FFD966"
-		box.style.console = "white"
 		box.children[0].style.display = "block"
 		box.children[1].style.display = "none"
-	}else{
+	} else {
 		box.style.backgroundColor = ""
 		box.children[1].style.display = "block"
 		box.children[0].style.display = "none"
 	}
 }
+// C <=> F ( requires classes + has to be box (DOM el))
+function convertTemp(temp) {
+	console.log(temp.innerHTML.slice(0, 3))
+	temp.addEventListener("click", _ => {
+		if (temp.classList.contains("C")) {
+			temp.classList.remove("C")
+			temp.classList.add("F")
+			temp.innerHTML = `${Math.round((Number(temp.innerHTML.slice(0, -2)) * 9) / 5 + 32)} °F`
+		} else {
+			temp.classList.remove("F")
+			temp.classList.add("C")
+			temp.innerHTML = `${Math.round(((Number(temp.innerHTML.slice(0, -2)) - 32) * 5) / 9)} °C`
+		}
+	})
+}
+// default today / tommorow
+showDay(document.querySelector(".main.today"), data.current, data.current)
+showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
+// all the time convert while click
+function allConvertable() {
+	let temps = document.querySelectorAll(".temperature")
+	temps.forEach(temp => convertTemp(temp))
+	let dewpoints = document.querySelectorAll(".dewpoint")
+	dewpoints.forEach(dewpoint => convertTemp(dewpoint.children[0]))
+	let feelslikes = document.querySelectorAll(".feelslike")
+	feelslikes.forEach(feelslike => convertTemp(feelslike.children[0]))
+	let windchills = document.querySelectorAll(".windchill")
+	windchills.forEach(windchill => convertTemp(windchill.children[0]))
+	let heatindex = document.querySelectorAll(".heatindex")
+	heatindex.forEach(heatindex => convertTemp(heatindex.children[0]))
+}
+allConvertable()
 ////////////////          7 days ahead ( week )          ///////////////
 let weekData = data.forecast.forecastday
 function displayWeek() {

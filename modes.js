@@ -10,8 +10,6 @@ function applyChanges(){
             makeActive(lastActive)
         }
     }    
-    // today / tomorrow changes
-    
 }
 
 // applying mode from localStorage if there is  

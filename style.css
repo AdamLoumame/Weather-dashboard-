@@ -58,7 +58,7 @@ header .left-part .icons {
 	align-items: center;
 }
 header .left-part .icons a:first-of-type {
-	margin-right: 1.5rem;
+	margin-right: 1rem;
 }
 header .left-part .icons a {
 	background-color: var(--icon-bg-color);
@@ -229,13 +229,6 @@ header .right-part .user-image img {
 .error-404 .fours span {
 	transition: 0.3s;
 }
-.error-404 .cloud {
-	position: absolute;
-	top: 7rem;
-	right: 3rem;
-	width: 13rem;
-	transition: 0.5s;
-}
 .error-404 .sun {
 	position: absolute;
 	top: 0;
@@ -248,10 +241,6 @@ header .right-part .user-image img {
 }
 .error-404 .fours:hover {
 	opacity: 1;
-}
-.error-404 .container:hover .cloud {
-	transform: translateX(30rem);
-	opacity: 0;
 }
 .error-404 .container:hover .fours span:first-of-type {
 	transition: 0.4s 0.8s;
@@ -729,24 +718,30 @@ header .right-part .user-image img {
 .left-part .main.today,
 .left-part .main.tomorrow {
 	padding: 1rem;
-	background-color: var(--info-color);
 	display: none;
 	align-items: center;
 	gap: 1rem;
 	border-radius: var(--border-radius);
-	transition: .3s;
+	transition: 0.3s;
 	position: relative;
 	overflow: hidden;
+	justify-content: space-between;
 }
-.left-part .main.today::before,
-.left-part .main.tomorrow::before{
+.left-part .main.today {
+	color: white;
+}
+.left-part .main.tomorrow {
+	color: var(--main-text-color);
+	background-color: var(--sec-bg-color);
+}
+.left-part .main.today::before {
 	content: "";
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: #000000a2;
+	background-color: rgba(0, 0, 0, 0.6);
 	z-index: 2;
 }
 .left-part .main.today .left,
@@ -758,9 +753,10 @@ header .right-part .user-image img {
 	flex-basis: 40%;
 	z-index: 10;
 }
-.left-part .main.today .left .temp,
-.left-part .main.tomorrow .left .temp {
+.left-part .main.today .left .temperature,
+.left-part .main.tomorrow .left .temperature {
 	font-size: 4rem;
+	cursor: pointer;
 	font-family: var(--number-font);
 	margin-bottom: 0.5rem;
 }
@@ -786,7 +782,7 @@ header .right-part .user-image img {
 
 .left-part .main.today .left .infos .box .value,
 .left-part .main.tomorrow .left .infos .box .value {
-	font-size: 1.5rem;
+	font-size: 1.3rem;
 	font-family: var(--number-font);
 }
 .left-part .main.today .left .infos .box .text,
@@ -803,74 +799,171 @@ header .right-part .user-image img {
 	display: flex;
 	flex-direction: column;
 	flex-basis: 35%;
+	position: relative;
 }
 .left-part .main.today .right .image .weatherImage,
 .left-part .main.tomorrow .right .image .weatherImage {
-	width: 10rem;
+	width: 8rem;
+	cursor: pointer;
+}
+.left-part .main.today .right .image .weatherImage:hover + .description,
+.left-part .main.tomorrow .right .image .weatherImage:hover + .description {
+	opacity: 1;
 }
 .left-part .main.today .right .image .description,
 .left-part .main.tomorrow .right .image .description {
-	white-space: nowrap;
-	font-size: 1.6rem;
 	font-weight: 600;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	max-width: 10rem;
+	font-size: 0.8rem;
+	background-color: var(--bg-color);
+	padding: 1rem;
+	color: var(--main-text-color);
+	border-radius: var(--border-radius);
+	text-align: center;
+	opacity: 0;
+	transition: 0.3s;
+	cursor: pointer;
+}
+.left-part .main.today .right .image .description:hover,
+.left-part .main.tomorrow .right .image .description:hover {
+	opacity: 1;
+}
+.left-part .main.today .more,
+.left-part .main.tomorrow .more {
+	flex-basis: 40%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
 	width: 100%;
+	height: 100%;
+	z-index: 10;
+}
+.left-part .main.today .more .Date,
+.left-part .main.tomorrow .more .Date {
+	width: 70%;
+	font-size: 1.5rem;
+	border-bottom: 1px solid var(--main-text-color);
+	padding-bottom: 1rem;
 	text-align: center;
 }
-/* BGs  */
-.day-bg{
-	display: none;
+.left-part .main.today .more .Date {
+	border-color: white;
 }
-.day-bg .sun{
+.left-part .main.today .more .details,
+.left-part .main.tomorrow .more .details {
+	display: flex;
+	justify-content: space-between;
+	width: 80%;
+	padding-top: 0.5rem;
+}
+.left-part .main.today .more .details .sec > div,
+.left-part .main.tomorrow .more .details .sec > div {
+	color: var(--sec-text-color);
+	font-size: 0.8rem;
+	margin: 0.4rem 0;
+}
+.left-part .main.today .more .details .sec > div {
+	color: white;
+}
+.left-part .main.today .more .details .sec > div .value,
+.left-part .main.tomorrow .more .details .sec > div .value {
+	color: var(--main-text-color);
+	font-weight: bold;
+	cursor: pointer;
+}
+.left-part .main.today .more .details .sec > div .value {
+	color: white;
+}
+/* BGs  */
+.day-bg {
+	display: none;
+	overflow: hidden;
+	position: absolute;
+	height: 100%;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+.day-bg .sun {
 	position: absolute;
 	top: -2rem;
 	left: -2rem;
 	width: 10rem;
 }
 .wave {
-    position: absolute;
-    background-image: url('/images/weather/big images/wave.png');
-    background-repeat: repeat-x;
-    background-position: 0 100%;
-    background-size: 1000px 120px;
-    opacity: 0.2;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    animation: waving 15s linear infinite;
-    animation-delay: -9s;
+	position: absolute;
+	background-image: url("/images/weather/big images/wave.png");
+	background-repeat: repeat-x;
+	background-position: 0 100%;
+	background-size: 1000px 120px;
+	opacity: 0.2;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	animation: waving 15s linear infinite;
+	animation-delay: -9s;
 }
 .wave1 {
-    position: absolute;
-    background-image: url('/images/weather/big images/wave.png');
-    background-repeat: repeat-x;
-    background-position: 0 100%;
-    background-size: 1000px 120px;
-    opacity: 0.6;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    animation:waving 10s linear infinite;
-    animation-delay: -13s;
+	position: absolute;
+	background-image: url("/images/weather/big images/wave.png");
+	background-repeat: repeat-x;
+	background-position: 0 100%;
+	background-size: 1000px 120px;
+	opacity: 0.6;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	animation: waving 10s linear infinite;
+	animation-delay: -13s;
 }
 .wave2 {
-    position: absolute;
-    background-image: url('/images/weather/big images/wave.png');
-    background-repeat: repeat-x;
-    background-position: 0 100%;
-    background-size: 1000px 120px;
-    opacity: 0.4;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    animation: waving 25s linear infinite;
-    animation-delay: -5s;
+	position: absolute;
+	background-image: url("/images/weather/big images/wave.png");
+	background-repeat: repeat-x;
+	background-position: 0 100%;
+	background-size: 1000px 120px;
+	opacity: 0.4;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	animation: waving 25s linear infinite;
+	animation-delay: -5s;
 }
 @keyframes waving {
-    0% { background-position-x: 0; }
-    100% { background-position-x: 1000px;}
+	0% {
+		background-position-x: 0;
+	}
+	100% {
+		background-position-x: 1000px;
+	}
+}
+.night-bg {
+	height: 100%;
+	top: 0;
+	left: 0;
+	width: 100%;
+	position: absolute;
+	background-image: linear-gradient(90deg, #020111 10%, #3a3a52 100%);
+	border-radius: var(--border-radius);
+	overflow: hidden;
+	display: none;
+}
+.night-bg .moon {
+	position: absolute;
+	top: -4rem;
+	right: -4rem;
+	width: 13rem;
+}
+.star {
+	position: absolute;
 }
 .midle .right-part {
 	flex-basis: 25%;
