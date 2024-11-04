@@ -339,13 +339,14 @@ header .right-part .user-image img {
 }
 /* midle */
 .midle {
-	padding-top: 10px;
+	padding-top: 0.6rem;
 	display: none;
 	justify-content: space-between;
 }
+/* left midle */
 .midle .left-part {
 	flex-basis: 75%;
-	padding: 10px;
+	padding: 0.6rem;
 }
 .midle .left-part .info {
 	display: flex;
@@ -413,7 +414,7 @@ header .right-part .user-image img {
 /* main */
 .midle .left-part .main {
 	height: 13rem;
-	margin-top: 20px;
+	margin-top: 1.25rem;
 	display: none;
 }
 .midle .left-part .main.active {
@@ -540,7 +541,7 @@ header .right-part .user-image img {
 	width: 100%;
 	border-radius: var(--border-radius);
 	background-color: var(--info-color);
-	margin-top: 20px;
+	margin-top: 1.25rem;
 	padding: 1.5rem 2rem;
 	justify-content: space-between;
 	transition: 0.3s;
@@ -965,7 +966,75 @@ header .right-part .user-image img {
 .star {
 	position: absolute;
 }
+/* right midle */
 .midle .right-part {
 	flex-basis: 25%;
-	padding: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
+}
+.midle .right-part .title{
+	margin: 0;
+	margin-bottom: 1.5rem;
+	margin-top: 1.6rem;
+	font-weight: normal;
+	text-align: left;
+	width: 100%;
+	padding-left: 1.2rem;
+}
+.midle .right-part .Chance-of-rain{	
+	height: 90%;
+	width: 90%;
+	border-radius: var(--border-radius);
+	padding: 1rem 0;
+	position: relative;
+}
+.midle .right-part .Chance-of-rain .Yaxis{
+	height: 70%;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: column;
+}
+.midle .right-part .Chance-of-rain .Yaxis .axe{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.midle .right-part .Chance-of-rain .Yaxis .axe span{
+	font-size: .8rem;
+	color: var(--sec-text-color);
+}
+.midle .right-part .Chance-of-rain .Yaxis .axe .line{
+	border-bottom: 1px dashed #323234;
+	width: 80%;
+}
+.midle .right-part .Chance-of-rain .Xaxis{
+	height: 100%;
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.midle .right-part .Chance-of-rain .Xaxis .axe{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+}
+.midle .right-part .Chance-of-rain .Xaxis .axe span{
+	font-size: .8rem;
+	color: var(--sec-text-color);
+}
+.midle .right-part .Chance-of-rain .Xaxis .axe .progress{
+	width: .5rem;
+	background-color: var(--info-color);
+	border-radius: var(--border-radius);
+	margin-bottom: 1rem;
+}
+.midle .right-part .Chance-of-rain .Xaxis .axe img{
+	width: 2rem;
 }

@@ -32,11 +32,11 @@ document.querySelectorAll(".date").forEach(date => {
 })
 
 // imports ( minimalize code )
-import {datetoName, getBoxData, airColor, uvColor} from "./utilities.js"
-import {weatherConditions, aqiImage, maxAirValues} from "./dicts.js"
+import {datetoName, getBoxData, airColor, uvColor, getTime} from "./utilities.js"
+import {mainWeatherConditions, aqiImage, maxAirValues, forecastWeatherConditions} from "./dicts.js"
 import {getData} from "./api.js" // main fetching function
 // default
-let data = await getData("japan") // default data that will be showed first to the user
+let [data, weekData] = await getData("marrakech") // default data that will be showed first to the user
 document.querySelector("header .left-part .location .loc-name").innerHTML = `${data.location.name}, <span>${data.location.country}</span>`
 
 // search listeners
@@ -55,10 +55,7 @@ document.addEventListener("keyup", e => {
 
 // changing data trough inputed value ( if there is )
 async function OnSearch() {
-	data = await getData(searchBar.value) // new data !
-	console.log(data)
-	// week changes
-	weekData = data.forecast.forecastday // update data
+	;[data, weekData] = await getData(searchBar.value) // new data !
 	let lastActiveIndex = Array.from(document.querySelector(".midle .left-part .main.week").children).indexOf(document.querySelector(".day.active"))
 	displayWeek() // displaying fetched data and creating new boxes
 	addBoxInteractions() // making new boxes interactive
@@ -72,11 +69,14 @@ async function OnSearch() {
 	showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
 	// convert today/tomorrow temps like this : C <=> F
 	allConvertable()
+	// graph of chances of rain
+	showRainGraph()
 	// changing to a new name city on the DOM
 	document.querySelector("header .left-part .location .loc-name").innerHTML = `${data.location.name}, <span>${data.location.country}</span>`
 }
 ////////////////         Today + Tommorow          ///////////////
 function showDay(box, data, data2) {
+	// infos vary taking care of today or tomorrow
 	// infos to show to the user for data ( left / right )
 	let temp // getting correct temp unit ( value )
 	let tempClass
@@ -94,11 +94,12 @@ function showDay(box, data, data2) {
 	let text = data.condition.text
 
 	// infos to show to the user for data2 ( class : more )
+	let current = data.wind_kph ? true : false
 	let dateNumbers = data2.last_updated ? data2.last_updated : data2.time
-	let date = `${datetoName(dateNumbers.slice(0, 10))} ${new Date(dateNumbers.slice(5, 7)).toLocaleString("en", {month: "short"})} ${dateNumbers.slice(0,4)}` 
+	let date = current ? "Current" : `${dateNumbers.slice(8, 10)} ${new Date(dateNumbers.slice(5, 7)).toLocaleString("en", {month: "short"})} ${dateNumbers.slice(0, 4)}`
 	// setting the img based on the theme / mode and text
 	let imagePack = document.querySelector(".mode").classList[1] // dark or light
-	let img = weatherConditions[imagePack][data.condition.code]
+	let img = mainWeatherConditions[imagePack][data.condition.code]
 	if (data.condition.code === 1000) {
 		if (data.is_day) {
 			img = "/images/weather/big images/sun.png"
@@ -216,7 +217,6 @@ function dayChanges(box, isDay) {
 }
 // C <=> F ( requires classes + has to be box (DOM el))
 function convertTemp(temp) {
-	console.log(temp.innerHTML.slice(0, 3))
 	temp.addEventListener("click", _ => {
 		if (temp.classList.contains("C")) {
 			temp.classList.remove("C")
@@ -247,24 +247,22 @@ function allConvertable() {
 }
 allConvertable()
 ////////////////          7 days ahead ( week )          ///////////////
-let weekData = data.forecast.forecastday
 function displayWeek() {
 	// clean the week box to add new data boxes
 	document.querySelector(".midle .left-part .main.week").innerHTML = ""
 
 	// placing the first boxes according to the data first is the current day
-	weekData.forEach(dayData => {
-		let dayName = datetoName(dayData.date)
+	weekData.data.slice(0, 7).forEach(dayData => {
+		let dayName = datetoName(dayData.datetime)
 		let shortDayName = dayName.slice(0, 3)
-
 		// getting the right image based on the mode (dark / light)
 		let imagePack = document.querySelector(".mode").classList[1] // dark or light
 
 		const boxDay = document.createElement("div")
 		boxDay.innerHTML = `
         <span class="abr">${shortDayName}</span>
-        <img src="${weatherConditions[imagePack][dayData.day.condition.code]}" alt="" class="weather-img" />
-        <div class="temp">${Math.round(dayData.day.avgtemp_c)}°</div>
+        <img src="${forecastWeatherConditions[imagePack][dayData.weather.code]}" alt="" class="weather-img" />
+        <div class="temp">${Math.round(dayData.temp)}°</div>
         `
 		boxDay.classList.add("day", dayName)
 		document.querySelector(".midle .left-part .main.week").appendChild(boxDay)
@@ -288,30 +286,31 @@ addBoxInteractions() // making default boxes interactive
 function makeActive(box) {
 	box.classList.add("active")
 
-	let data = getBoxData(box, weekData)
-	let month = new Date(data.date.slice(5, 7)).toLocaleString("en", {month: "short"})
+	let data = getBoxData(box, weekData.data.slice(0, 7))
+	let month = new Date(data.datetime.slice(5, 7)).toLocaleString("en", {month: "short"})
+	console.log(data)
 
 	// getting the right image based on the mode (dark / light)
 	let imagePack = document.querySelector(".mode").classList[1] // dark or light
 	box.innerHTML = `
         <div class="top">
-            <h3 class="name">${datetoName(data.date)}</h3>
-            <span class="month">${month} ${data.date.slice(8)}</span>
+            <h3 class="name">${datetoName(data.datetime)}</h3>
+            <span class="month">${month} ${data.datetime.slice(8)}</span>
         </div>
         <div class="bottom">
             <div class="left">
-                <div class="temp">${Math.round(data.day.avgtemp_c)}°</div>
+                <div class="temp">${Math.round(data.temp)}°</div>
                 <div class="info">
-                    <p class="real-feel">Real Feel<span class="number"> : ${Math.round(data.hour[15].feelslike_c)}°</span></p>
-                    <p class="wind">max Wind<span class="number"> : ${data.day.maxwind_mph} Km/h</span></p>
-                    <p class="pressure">Pressure<span class="number"> : ${Math.round(data.hour[15].pressure_mb)}MB</span></p>
-                    <p class="humidity">Humidity<span class="number"> : ${Math.round(data.day.avghumidity)}%</span></p></div>
+                    <p class="real-feel">Real Feel<span class="number"> : ${Math.round((data.app_max_temp + data.min_temp) / 2)}°</span></p>
+                    <p class="wind">Wind<span class="number"> : ${Math.round(data.wind_spd * 3.6)} Km/h</span></p>
+                    <p class="pressure">Pressure<span class="number"> : ${Math.round(data.pres)}MB</span></p>
+                    <p class="humidity">Humidity<span class="number"> : ${Math.round(data.rh)}%</span></p></div>
                 </div>
             <div class="rigth">
-                <img src="${weatherConditions[imagePack][data.day.condition.code]}" alt="" class="weather-img"/>
+                <img src="${forecastWeatherConditions[imagePack][data.weather.code]}" alt="" class="weather-img"/>
                 <div class="info">
-                    <p class="sunrise">Sunrise<span class="number"> : ${data.astro.sunrise}</span></p>
-                    <p class="sunset">Sunset<span class="number"> : ${data.astro.sunset}</span></p>
+                    <p class="sunrise">Sunrise<span class="number"> : ${getTime(data.sunrise_ts, weekData.timezone)}</span></p>
+                    <p class="sunset">Sunset<span class="number"> : ${getTime(data.sunset_ts, weekData.timezone)}</span></p>
                 </div>
             </div>
         </div>
@@ -326,15 +325,14 @@ function resetBoxes() {
 		box.classList.remove("active")
 
 		// get the data of this box using its class
-		let finalData = getBoxData(box, weekData)
-
+		let finalData = getBoxData(box, weekData.data.slice(0, 7))
 		// getting the right image based on the mode (dark / light)
 		let imagePack = document.querySelector(".mode").classList[1] // dark or light
 
 		box.innerHTML = `
-            <span class="abr">${datetoName(finalData.date).slice(0, 3)}</span>
-            <img src="${weatherConditions[imagePack][finalData.day.condition.code]}" alt="" class="weather-img" />
-            <div class="temp">${Math.round(finalData.day.avgtemp_c)}°</div>
+            <span class="abr">${datetoName(finalData.datetime).slice(0, 3)}</span>
+            <img src="${forecastWeatherConditions[imagePack][finalData.weather.code]}" alt="" class="weather-img" />
+            <div class="temp">${Math.round(finalData.temp)}°</div>
         `
 	})
 }
@@ -428,3 +426,22 @@ function uvForecast(days) {
 		i++
 	})
 }
+////////////////          Chances of Rain          ///////////////
+export function showRainGraph() {
+	document.querySelector(".midle .right-part .Chance-of-rain .Xaxis").innerHTML = ""
+	let days = weekData.data.slice(0, 7)
+	days.forEach(day => {
+		let chanceOfRain = day.pop > 0 ? day.pop - 14 : day.pop - 14
+		let axe = document.createElement("div")
+		axe.classList.add("axe")
+		if (chanceOfRain > 0) {
+			axe.innerHTML = `<div class="progress"></div><span>${datetoName(day.datetime.slice(0, 11)).slice(0, 3)}</span>`
+		} else {
+			let imagePack = document.querySelector(".mode").classList[1] // dark or light
+			axe.innerHTML = `<img src="${forecastWeatherConditions[imagePack][day.weather.code]}"><span>${datetoName(day.datetime.slice(0, 11)).slice(0, 3)}</span>`
+		}
+		axe.children[0].style.height = chanceOfRain + "%"
+		document.querySelector(".midle .right-part .Chance-of-rain .Xaxis").appendChild(axe)
+	})
+}
+showRainGraph()

@@ -1,5 +1,6 @@
 // some changes require funtions from other modules 
-import {makeActive , resetBoxes} from './midle.js'
+import { makeActive , resetBoxes } from './midle.js'
+import { showRainGraph } from './midle.js'
 // all the changes that occures while changing mode 
 function applyChanges(){
     // week changes
@@ -10,6 +11,8 @@ function applyChanges(){
             makeActive(lastActive)
         }
     }    
+    // rain graph changes
+    showRainGraph()
 }
 
 // applying mode from localStorage if there is  
@@ -51,9 +54,6 @@ function dark(){
     localStorage.setItem("mode","dark")
 
     applyChanges()
-
-    // error 404 changes
-    document.querySelector(".cloud").src = "/images/weather/big images/dark cloud.png"
 }
 // activate light mode function
 function light(){
@@ -76,6 +76,4 @@ function light(){
     localStorage.setItem("mode","light")
 
     applyChanges()
-
-    document.querySelector(".cloud").src = "/images/weather/big images/light cloud.png"
 }
