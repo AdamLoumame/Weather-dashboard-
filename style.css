@@ -20,14 +20,18 @@ input:focus {
 input {
 	caret-color: var(--info-color);
 }
+html {
+	scroll-behavior: smooth;
+}
 body {
 	font-family: "Mulish", serif !important;
 	width: 100%;
-	height: 100vh;
+	height: fit-content;
 	margin: 0;
 	padding: 20px 15px;
 	background-color: var(--bg-color) !important;
 	color: var(--main-text-color) !important;
+	scroll-behavior: smooth;
 }
 ul {
 	padding: 0;
@@ -37,7 +41,16 @@ ul {
 a {
 	text-decoration: none;
 }
-
+::-webkit-scrollbar {
+	width: 5px;
+}
+::-webkit-scrollbar-track {
+	background:	var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background: var(--info-color);
+}
 /* header */
 header {
 	display: flex;
@@ -199,14 +212,13 @@ header .right-part .user-image img {
 	height: 85%;
 	width: 100%;
 	background-color: var(--bg-color);
-	position: relative;
 	display: none;
 }
 .error-404 .container {
 	width: 40rem;
 	height: 25rem;
 	position: absolute;
-	top: 50%;
+	top: 53%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	cursor: pointer;
@@ -297,7 +309,6 @@ header .right-part .user-image img {
 	height: 90%;
 	width: 100%;
 	background-color: var(--bg-color);
-	position: relative;
 	display: block;
 }
 .loader .container {
@@ -542,7 +553,7 @@ header .right-part .user-image img {
 	border-radius: var(--border-radius);
 	background-color: var(--info-color);
 	margin-top: 1.25rem;
-	padding: 1.5rem 2rem;
+	padding: .9rem 2rem;
 	justify-content: space-between;
 	transition: 0.3s;
 	position: relative;
@@ -974,7 +985,7 @@ header .right-part .user-image img {
 	justify-content: space-between;
 	flex-direction: column;
 }
-.midle .right-part .title{
+.midle .right-part .title {
 	margin: 0;
 	margin-bottom: 1.5rem;
 	margin-top: 1.6rem;
@@ -983,34 +994,34 @@ header .right-part .user-image img {
 	width: 100%;
 	padding-left: 1.2rem;
 }
-.midle .right-part .Chance-of-rain{	
+.midle .right-part .Chance-of-rain {
 	height: 90%;
 	width: 90%;
 	border-radius: var(--border-radius);
 	padding: 1rem 0;
 	position: relative;
 }
-.midle .right-part .Chance-of-rain .Yaxis{
+.midle .right-part .Chance-of-rain .Yaxis {
 	height: 70%;
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	flex-direction: column;
 }
-.midle .right-part .Chance-of-rain .Yaxis .axe{
+.midle .right-part .Chance-of-rain .Yaxis .axe {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
-.midle .right-part .Chance-of-rain .Yaxis .axe span{
-	font-size: .8rem;
+.midle .right-part .Chance-of-rain .Yaxis .axe span {
+	font-size: 0.8rem;
 	color: var(--sec-text-color);
 }
-.midle .right-part .Chance-of-rain .Yaxis .axe .line{
+.midle .right-part .Chance-of-rain .Yaxis .axe .line {
 	border-bottom: 1px dashed #323234;
 	width: 80%;
 }
-.midle .right-part .Chance-of-rain .Xaxis{
+.midle .right-part .Chance-of-rain .Xaxis {
 	height: 100%;
 	width: 80%;
 	display: flex;
@@ -1019,22 +1030,135 @@ header .right-part .user-image img {
 	top: 0;
 	right: 0;
 }
-.midle .right-part .Chance-of-rain .Xaxis .axe{
+.midle .right-part .Chance-of-rain .Xaxis .axe {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 	align-items: center;
 }
-.midle .right-part .Chance-of-rain .Xaxis .axe span{
-	font-size: .8rem;
+.midle .right-part .Chance-of-rain .Xaxis .axe span {
+	font-size: 0.8rem;
 	color: var(--sec-text-color);
 }
-.midle .right-part .Chance-of-rain .Xaxis .axe .progress{
-	width: .5rem;
+.midle .right-part .Chance-of-rain .Xaxis .axe .progress {
+	width: 0.5rem;
 	background-color: var(--info-color);
 	border-radius: var(--border-radius);
 	margin-bottom: 1rem;
 }
-.midle .right-part .Chance-of-rain .Xaxis .axe img{
+.midle .right-part .Chance-of-rain .Xaxis .axe img {
 	width: 2rem;
+}
+/* lower */
+.lower{
+	display: flex;
+	justify-content: space-between;
+	height: 18rem;
+}
+.lower .left{
+	flex-basis: 75%;
+	padding: .6rem;
+	width: 100%;
+}
+.lower .left .head{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.lower .left .head h4{
+	margin: 0;
+	font-weight: normal;
+	font-size: 1.2rem;
+}
+.lower .left .head span{
+	display: flex;
+	align-items: center;
+	background-color: var(--sec-bg-color);
+	border-radius: var(--border-radius);
+	color: var(--main-text-color);
+	padding: .5rem 1rem;
+	font-size: .7rem;
+	cursor: pointer;
+}
+.lower .left .head span img{
+	margin-left: .8rem;
+	height: 1rem;
+}
+.lower .left #map{
+	height: 100%;
+	position: relative;
+	margin-top: 1rem;
+}
+.ol-viewport canvas{
+	border-radius: var(--border-radius)!important;
+}
+.ol-zoom {
+	display: flex;
+	justify-content: space-between!important;	
+	background-color: transparent!important;
+	flex-direction: column!important;
+	background-color: transparent!important;
+	height: 4rem !important;
+	position: absolute;
+	left: 95% !important;
+	top: 50% !important;
+	transform: translateY(-50%);
+}
+.ol-zoom-in,
+.ol-zoom-out{
+	border-radius: var(--border-radius)!important;
+	background-color: var(--sec-bg-color)!important;
+	color: var(--main-text-color)!important; 
+	border: none!important;
+	display: flex!important;
+	align-items: center!important;
+	justify-content: center!important;
+	font-size: 20px!important;
+	cursor: pointer!important;
+	transition: 0.3s!important;
+}
+.zoom-location{
+	position: absolute;
+	left: 95%;
+	bottom: 1rem;
+	border-radius: var(--border-radius);
+	background-color: var(--sec-bg-color);
+	color: var(--main-text-color); 
+	padding: .5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	z-index: 2;
+	transition: .3s;
+	border: none;
+}
+.zoom-location:hover,
+.layerSwitcher:hover{
+	outline: 1px solid var(--sec-bg-color);
+}
+.zoom-location span{
+	font-size: 15px;
+}
+.layerSwitcher{
+	position: absolute;
+	top: 1rem;
+	left: 95%;
+	background-color:var(--sec-bg-color);
+	border-radius: var(--border-radius);
+	border: none;
+	z-index: 2;
+	color: var(--main-text-color);
+	padding: .5rem;
+	transition: .3s;
+	cursor: pointer;
+	display: flex;
+}
+.layerSwitcher span{
+	font-size: 15px;
+}
+.lower .right{
+	flex-basis: 25%;
+	padding: .6rem;
+	width: 100%;
 }

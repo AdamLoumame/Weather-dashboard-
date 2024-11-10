@@ -36,13 +36,13 @@ import {datetoName, getBoxData, airColor, uvColor, getTime} from "./utilities.js
 import {mainWeatherConditions, aqiImage, maxAirValues, forecastWeatherConditions} from "./dicts.js"
 import {getData} from "./api.js" // main fetching function
 // default
-let [data, weekData] = await getData("marrakech") // default data that will be showed first to the user
+let [data, weekData] = await getData("london") // default data that will be showed first to the user
 document.querySelector("header .left-part .location .loc-name").innerHTML = `${data.location.name}, <span>${data.location.country}</span>`
 
 // search listeners
 let searchBar = document.querySelector(".search-bar")
-let searhcButton = document.querySelector(".search-button")
-searhcButton.addEventListener("click", e => {
+let searchButton = document.querySelector(".search-button")
+searchButton.addEventListener("click", e => {
 	if (searchBar.value) {
 		OnSearch()
 	}
@@ -55,7 +55,7 @@ document.addEventListener("keyup", e => {
 
 // changing data trough inputed value ( if there is )
 async function OnSearch() {
-	;[data, weekData] = await getData(searchBar.value) // new data !
+	[data, weekData] = await getData(searchBar.value) // new data !
 	let lastActiveIndex = Array.from(document.querySelector(".midle .left-part .main.week").children).indexOf(document.querySelector(".day.active"))
 	displayWeek() // displaying fetched data and creating new boxes
 	addBoxInteractions() // making new boxes interactive
@@ -78,8 +78,7 @@ async function OnSearch() {
 function showDay(box, data, data2) {
 	// infos vary taking care of today or tomorrow
 	// infos to show to the user for data ( left / right )
-	let temp // getting correct temp unit ( value )
-	let tempClass
+	let temp, tempClass // getting correct temp unit ( value )
 	if (box.children.length > 0 && box.children[2].children[0].classList.contains("F")) {
 		temp = Math.round(data.temp_f ? data.temp_f : data.avgtemp_f) + " °F"
 		tempClass = "F"
@@ -288,7 +287,6 @@ function makeActive(box) {
 
 	let data = getBoxData(box, weekData.data.slice(0, 7))
 	let month = new Date(data.datetime.slice(5, 7)).toLocaleString("en", {month: "short"})
-	console.log(data)
 
 	// getting the right image based on the mode (dark / light)
 	let imagePack = document.querySelector(".mode").classList[1] // dark or light
@@ -431,16 +429,18 @@ export function showRainGraph() {
 	document.querySelector(".midle .right-part .Chance-of-rain .Xaxis").innerHTML = ""
 	let days = weekData.data.slice(0, 7)
 	days.forEach(day => {
-		let chanceOfRain = day.pop > 0 ? day.pop - 14 : day.pop - 14
+		let chanceOfRain = (day.pop / 86) * 100
 		let axe = document.createElement("div")
 		axe.classList.add("axe")
 		if (chanceOfRain > 0) {
+			// chance of precip
 			axe.innerHTML = `<div class="progress"></div><span>${datetoName(day.datetime.slice(0, 11)).slice(0, 3)}</span>`
+			axe.children[0].style.height = `${chanceOfRain}%`
 		} else {
+			// no precip ( choing that its rainy but other weather condition )
 			let imagePack = document.querySelector(".mode").classList[1] // dark or light
 			axe.innerHTML = `<img src="${forecastWeatherConditions[imagePack][day.weather.code]}"><span>${datetoName(day.datetime.slice(0, 11)).slice(0, 3)}</span>`
 		}
-		axe.children[0].style.height = chanceOfRain + "%"
 		document.querySelector(".midle .right-part .Chance-of-rain .Xaxis").appendChild(axe)
 	})
 }

@@ -11,13 +11,16 @@
 		<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
 
+		<!-- map -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.2.1/ol.css">
+
 		<!-- icons -->
 		<link rel="icon" href="/images/weather/big images/ghost.png" />
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 		<script src="https://kit.fontawesome.com/ab3056bc7e.js" crossorigin="anonymous"></script>
 		<title>Weather DashBoard</title>
 	</head>
-	<body>
+	<body> 
 		<!-- header -->
 		<header>
 			<div class="left-part">
@@ -45,7 +48,7 @@
 			</div>
 		</header>
 
-		<!-- midle part -->
+		<!-- error-404 -->
 		<div class="error-404">
 			<div class="container">
 				<img src="./images/weather/big images/sun.png" alt="" class="sun" />
@@ -78,9 +81,7 @@
 						<span class="option right">Air quality</span>
 					</div>
 				</div>
-				<div class="main today">
-					
-				</div>
+				<div class="main today"></div>
 				<div class="main tomorrow"></div>
 				<!-- week -->
 				<div class="main week active"></div>
@@ -166,24 +167,48 @@
 				</div>
 			</div>
 			<div class="right-part">
-				<h4 class="title">Chance Of Rain</h4>
+				<h4 class="title">Chance Of Precipitation</h4>
 				<div class="Chance-of-rain">
 					<div class="Yaxis">
-						<div class="axe"><span>Rainy</span><div class="line"></div></div>
-						<div class="axe"><span>Sunny</span><div class="line"></div></div>
-						<div class="axe"><span>Heavy</span><div class="line"></div></div>
+						<div class="axe">
+							<span>Heavy</span>
+							<div class="line"></div>
+						</div>
+						<div class="axe">
+							<span>Rainy</span>
+							<div class="line"></div>
+						</div>
+						<div class="axe">
+							<span>Light</span>
+							<div class="line"></div>
+						</div>
 					</div>
 					<div class="Xaxis"></div>
 				</div>
 			</div>
 		</div>
-
+		<!-- lower part -->
+		<div class="lower">
+			<div class="left">
+				<div class="head">
+					<h4>Global Map</h4>
+					<span class="wide-view">View wide <img src="/images/weather/big images/stars.png" /></span>
+				</div>
+				<div class="mapError"></div>
+				<div id="map">
+					<button class="zoom-location"><span class="material-icons">my_location</span></button>
+					<button class="layerSwitcher"><span class="material-icons">layers</span></button>
+				</div>
+			</div>
+			<div class="right"></div>
+		</div>
 		<!-- CNDS -->
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
+		<script src="https://cdn.jsdelivr.net/npm/ol@v10.2.1/dist/ol.js"></script>
 		<!-- modules -->
+		<script type="module" src="modes.js"></script>
 		<script type="module" src="api.js"></script>
 		<script type="module" src="midle.js"></script>
-		<script src="lower.js"></script>
-		<script type="module" src="modes.js"></script>
+		<script type="module" src="lower.js"></script>
 	</body>
 </html>

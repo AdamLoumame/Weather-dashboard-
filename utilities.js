@@ -10,15 +10,15 @@ export function getBoxData(box, iterableData) {
 	})
 	return result
 }
-export function getTime(timestamp,timeZone) {
+export function getTime(timestamp, timeZone) {
 	let date = new Date(timestamp * 1000)
-    let options = {
-        timeZone: timeZone,
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    }
-	return new Intl.DateTimeFormat('en-US', options).format(date)
+	let options = {
+		timeZone: timeZone,
+		hour: "2-digit",
+		minute: "2-digit",
+		hour12: true,
+	}
+	return new Intl.DateTimeFormat("en-US", options).format(date)
 }
 export function airColor(percentage) {
 	if (percentage <= 25) {
