@@ -62,7 +62,7 @@ function catchStatus(badResult) {
 		})
 }
 
-// simple data for map places
+// simple data fetching 
 export async function getSimpleDataByName(name) {
 	const result = await fetch(`http://api.weatherapi.com/v1/current.json?key=0bb3890e2cdc4fbabd5164832240711&q=${name}`)
 	return await result.json()

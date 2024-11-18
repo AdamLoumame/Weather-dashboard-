@@ -18,9 +18,9 @@ export const mainWeatherConditions = {
 		1153: "/images/weather/dark mode/wind.png",
 		1168: "/images/weather/dark mode/shower or drizzle.png",
 		1171: "/images/weather/dark mode/shower or drizzle.png",
-		1180: "/images/weather/dark mode/hot.png",
+		1180: "/images/weather/dark mode/week rain.png",
 		1183: "/images/weather/dark mode/week rain.png",
-		1186: "/images/weather/dark mode/hot.png",
+		1186: "/images/weather/dark mode/strong or normal rain.png",
 		1189: "/images/weather/dark mode/strong or normal rain.png",
 		1192: "/images/weather/dark mode/strong or normal rain.png",
 		1195: "/images/weather/dark mode/strong or normal rain.png",
@@ -67,9 +67,9 @@ export const mainWeatherConditions = {
 		1153: "/images/weather/white mode/wind.png",
 		1168: "/images/weather/white mode/shower or drizzle.png",
 		1171: "/images/weather/white mode/shower or drizzle.png",
-		1180: "/images/weather/white mode/hot.png",
+		1180: "/images/weather/white mode/week rain.png",
 		1183: "/images/weather/white mode/week rain.png",
-		1186: "/images/weather/white mode/hot.png",
+		1186: "/images/weather/white mode/strong or normal rain.png",
 		1189: "/images/weather/white mode/strong or normal rain.png",
 		1192: "/images/weather/white mode/strong or normal rain.png",
 		1195: "/images/weather/white mode/strong or normal rain.png",
@@ -199,4 +199,44 @@ export const aqiImage = {
 	8: ["/images/weather/simboles/high.png", "Unhealthy"],
 	9: ["/images/weather/simboles/high.png", "Unhealthy"],
 	10: ["/images/weather/simboles/very high.png", "Hazardous"],
+}
+export let biggestCities = [
+	'New York', 'Tokyo', 'London', 'Paris', 'Beijing', 'Moscow', 'Los Angeles', 
+	'Shanghai', 'Mumbai', 'Istanbul', 'Rio de Janeiro', 'Sydney', 'Dubai', 
+	'Singapore', 'Mexico City', 'Cairo', 'Bangkok', 'Seoul', 'Jakarta', 
+	'Buenos Aires', 'Hong Kong', 'São Paulo', 'Rome', 'Madrid', 'Toronto', 
+	'Lagos', 'Berlin', 'Chicago', 'Kuala Lumpur', 'Tehran', 'Lima', 
+	'Dhaka', 'Cape Town', 'Manila', 'Nairobi', 'Bogotá', 'Riyadh', 
+	'Baghdad', 'Bangalore', 'Karachi', 'Melbourne', 'Barcelona', 
+	'San Francisco', 'Vienna', 'Warsaw', 'Brussels', 'Santiago', 
+	'Johannesburg', 'Casablanca', 'Kiev', 'Munich', 'Athens', 'Osaka', 
+	'Gaza City', 'Hanoi', 'Copenhagen', 'Montreal', 'Miami', 'Milan', 
+	'Boston', 'Stockholm', 'Amsterdam', 'Budapest', 'Zurich', 'Lisbon', 
+	'Prague', 'Antwerp', 'Dubai', 'Venice', 'Brisbane', 'Edinburgh', 
+	'Marseille', 'Helsinki', 'Damascus', 'Doha', 'Alexandria', 'Florence', 
+	'Dublin', 'Ho Chi Minh City', 'Rotterdam', 'Glasgow', 'Vancouver', 
+	'Tunis', 'Addis Ababa', 'Phnom Penh', 'Guangzhou', 'St. Petersburg', 
+	'Kathmandu', 'Ankara', 'Bucharest', 'Minsk', 'Lyon', 'Algiers', 
+	'Ramallah', 'Colombo', 'Rabat', 'Islamabad', 'Abu Dhabi', 
+	'Amman', 'Oslo', 'Quito', 'Panama City', 'Kuala Lumpur'
+]
+export let continents = {
+	light: {
+		AF: '/images/weather/continents/light/africa.png',
+		AN: '/images/weather/continents/light/antarctica.png',
+		AS: '/images/weather/continents/light/asia.png',
+		EU: '/images/weather/continents/light/europe.png',
+		NA: '/images/weather/continents/light/north america.png',
+		OC: '/images/weather/continents/light/oceania.png',
+		SA: '/images/weather/continents/light/south america.png'
+	},
+	dark: {
+		AF: '/images/weather/continents/dark/africa.png',
+		AN: '/images/weather/continents/dark/antarctica.png',
+		AS: '/images/weather/continents/dark/asia.png',
+		EU: '/images/weather/continents/dark/europe.png',
+		NA: '/images/weather/continents/dark/north america.png',
+		OC: '/images/weather/continents/dark/oceania.png',
+		SA: '/images/weather/continents/dark/south america.png'
+	}
 }

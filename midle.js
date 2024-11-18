@@ -31,7 +31,7 @@ document.querySelectorAll(".date").forEach(date => {
 	})
 })
 
-// imports ( minimalize code )
+// imports
 import {datetoName, getBoxData, airColor, uvColor, getTime} from "./utilities.js"
 import {mainWeatherConditions, aqiImage, maxAirValues, forecastWeatherConditions} from "./dicts.js"
 import {getData} from "./api.js" // main fetching function
@@ -39,23 +39,9 @@ import {getData} from "./api.js" // main fetching function
 let [data, weekData] = await getData("london") // default data that will be showed first to the user
 document.querySelector("header .left-part .location .loc-name").innerHTML = `${data.location.name}, <span>${data.location.country}</span>`
 
-// search listeners
-let searchBar = document.querySelector(".search-bar")
-let searchButton = document.querySelector(".search-button")
-searchButton.addEventListener("click", e => {
-	if (searchBar.value) {
-		OnSearch()
-	}
-})
-document.addEventListener("keyup", e => {
-	if (searchBar.value && e.code === "Enter") {
-		OnSearch()
-	}
-})
-
-// changing data trough inputed value ( if there is )
-async function OnSearch() {
-	[data, weekData] = await getData(searchBar.value) // new data !
+// Updating
+export async function UpdateMidle(value = "") {
+	;[data, weekData] = await getData(value) // new data !
 	let lastActiveIndex = Array.from(document.querySelector(".midle .left-part .main.week").children).indexOf(document.querySelector(".day.active"))
 	displayWeek() // displaying fetched data and creating new boxes
 	addBoxInteractions() // making new boxes interactive
@@ -67,7 +53,7 @@ async function OnSearch() {
 	showDay(document.querySelector(".main.today"), data.current, data.current)
 	// tommorow changes
 	showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
-	// convert today/tomorrow temps like this : C <=> F
+	// C <=> F
 	allConvertable()
 	// graph of chances of rain
 	showRainGraph()
@@ -98,21 +84,7 @@ function showDay(box, data, data2) {
 	let date = current ? "Current" : `${dateNumbers.slice(8, 10)} ${new Date(dateNumbers.slice(5, 7)).toLocaleString("en", {month: "short"})} ${dateNumbers.slice(0, 4)}`
 	// setting the img based on the theme / mode and text
 	let imagePack = document.querySelector(".mode").classList[1] // dark or light
-	let img = mainWeatherConditions[imagePack][data.condition.code]
-	if (data.condition.code === 1000) {
-		if (data.is_day) {
-			img = "/images/weather/big images/sun.png"
-		} else if (data.is_day === 0) {
-			img = "/images/weather/simboles/Group 1214.png"
-			text = "Clear"
-		}
-	} else if ((data.condition.code === 1003 || data.condition.code === 1006 || data.condition.code === 1204) && data.is_day === 0) {
-		if (imagePack === "dark") {
-			img = "/images/weather/dark mode/night/Group 5.png"
-		} else {
-			img = "/images/weather/white mode/night/Group 5.png"
-		}
-	}
+	let img = filterImage(data.condition.code, data.is_day, imagePack)
 	// setting vis img
 	let visImg
 	if (data.is_day === undefined) {
@@ -176,7 +148,7 @@ function showDay(box, data, data2) {
 					</div>
 					<div class="right">
 						<div class="image">
-							<img src="${img}" alt="" class="weatherImage">
+							<img src="${img}" alt="" class="weatherImage" data-condition="${data.condition.code}" data-isday="${data.is_day}"> 
 							<span class="description">${text}</span>
 						</div>
 					</div> `
@@ -214,6 +186,32 @@ function dayChanges(box, isDay) {
 		box.children[0].style.display = "none"
 	}
 }
+// update day image according to the mode
+export function UpdateBoxImage(box) {
+	let imagePack = document.querySelector(".mode").classList[1] // dark or light
+	let boxImage = box.querySelector(".right .image .weatherImage")
+	boxImage.src = filterImage(boxImage.dataset.condition, boxImage.dataset.isday, imagePack)
+}
+function filterImage(code, is_day, mode) {
+	let img = mainWeatherConditions[mode][code]
+	if (code == 1000) {
+		if (is_day == 1 || is_day == "undefined" || is_day == undefined) {
+			img = "/images/weather/big images/sun.png"
+		} else {
+			img = "/images/weather/simboles/Group 1214.png"
+		}
+	} else if ((code == 1003 || code == 1006 || code == 1204) && is_day == 0) {
+		if (mode === "dark") {
+			img = "/images/weather/dark mode/night/Group 5.png"
+		} else {
+			img = "/images/weather/white mode/night/Group 5.png"
+		}
+	}
+	return img
+}
+// default today / tommorow
+showDay(document.querySelector(".main.today"), data.current, data.current)
+showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
 // C <=> F ( requires classes + has to be box (DOM el))
 function convertTemp(temp) {
 	temp.addEventListener("click", _ => {
@@ -228,9 +226,6 @@ function convertTemp(temp) {
 		}
 	})
 }
-// default today / tommorow
-showDay(document.querySelector(".main.today"), data.current, data.current)
-showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
 // all the time convert while click
 function allConvertable() {
 	let temps = document.querySelectorAll(".temperature")
@@ -251,7 +246,7 @@ function displayWeek() {
 	document.querySelector(".midle .left-part .main.week").innerHTML = ""
 
 	// placing the first boxes according to the data first is the current day
-	weekData.data.slice(0, 7).forEach(dayData => {
+	weekData.data.slice(1, 8).forEach(dayData => {
 		let dayName = datetoName(dayData.datetime)
 		let shortDayName = dayName.slice(0, 3)
 		// getting the right image based on the mode (dark / light)
@@ -427,7 +422,7 @@ function uvForecast(days) {
 ////////////////          Chances of Rain          ///////////////
 export function showRainGraph() {
 	document.querySelector(".midle .right-part .Chance-of-rain .Xaxis").innerHTML = ""
-	let days = weekData.data.slice(0, 7)
+	let days = weekData.data.slice(1, 8)
 	days.forEach(day => {
 		let chanceOfRain = (day.pop / 86) * 100
 		let axe = document.createElement("div")

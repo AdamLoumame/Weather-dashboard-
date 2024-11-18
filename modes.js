@@ -1,8 +1,14 @@
 // some changes require funtions from other modules
-import {makeActive, resetBoxes, showRainGraph} from "./midle.js"
-import { UpdateLower } from "./lower.js"
+import {makeActive, resetBoxes, showRainGraph,UpdateBoxImage} from "./midle.js"
+import {UpdateLower} from "./lower.js"
+import { UpdateSugg } from "./search.js"
 // all the changes that occures while changing mode
 function applyChanges() {
+	// searchBar update
+	UpdateSugg()
+	// day / tomorrow changes 
+	UpdateBoxImage(document.querySelector(".main.today"))
+	UpdateBoxImage(document.querySelector(".main.tomorrow"))
 	// week changes
 	let lastActive = document.querySelector(".day.active")
 	if (document.querySelector(".day")) {
@@ -14,7 +20,7 @@ function applyChanges() {
 	// rain graph changes
 	showRainGraph()
 	// lower Updates
-    UpdateLower()
+	UpdateLower()
 }
 
 // applying mode from localStorage if there is

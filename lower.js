@@ -1,20 +1,15 @@
 import {getSimpleDataByCords, getSimpleDataByName} from "./api.js"
-import {mainWeatherConditions} from "./dicts.js"
-// search listeners
-let searchBar = document.querySelector(".search-bar")
-let searchButton = document.querySelector(".search-button")
-searchButton.addEventListener("click", e => {
-	if (searchBar.value) {
-		UpdateLower(searchBar.value)
-	}
-})
-document.addEventListener("keyup", e => {
-	if (searchBar.value && e.code === "Enter") {
-		UpdateLower(searchBar.value)
-	}
-})
+import {mainWeatherConditions, biggestCities} from "./dicts.js"
+import {UpdateMidle} from "./midle.js"
+
+// Updating
 let data = await getSimpleDataByName("london") // default data that will be showed first to the user
 export async function UpdateLower(value = "") {
+	mode = document.querySelector(".mode").classList[1]
+	UpdateCities()
+	if (lastLayer !== ReaLayer) {
+		applyLayer()
+	}
 	displayWeather()
 	data = await getSimpleDataByName(value)
 	map.getView().animate({
@@ -23,7 +18,7 @@ export async function UpdateLower(value = "") {
 		duration: 1500,
 	})
 }
-
+////////////////         MAP          ///////////////
 // markers group
 let markers = []
 let map = new ol.Map({
@@ -31,7 +26,7 @@ let map = new ol.Map({
 		center: ol.proj.fromLonLat([data.location.lon, data.location.lat]),
 		zoom: 10,
 		minZoom: 2,
-		maxZoom:18
+		maxZoom: 18,
 	}),
 	target: "map",
 })
@@ -64,11 +59,11 @@ let lightLayer = new ol.layer.Tile({
 })
 let ReaLayer = new ol.layer.Tile({
 	source: new ol.source.XYZ({
-		url: 'https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+		url: "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
 	}),
 	visible: false,
 	title: "lightLayer",
-	crossOrigin: 'anonymous' 
+	crossOrigin: "anonymous",
 })
 let lastLayer
 let mode = document.querySelector(".mode").classList[1]
@@ -76,12 +71,10 @@ applyLayer()
 map.addLayer(ReaLayer)
 map.addLayer(darkLayer)
 map.addLayer(lightLayer)
-
 // displaying weather condition and upadte while mvt occurs
 map.on("moveend", async _ => {
 	displayWeather()
 })
-
 async function displayWeather() {
 	let places = (await getBoundedCities(map.getView().calculateExtent())).elements
 	places.forEach(async place => {
@@ -109,7 +102,6 @@ async function displayWeather() {
 		map.addLayer(marker)
 		markers.push(marker)
 	})
-	lastPlaces = places
 }
 // getting the cities displayed to the user
 async function getBoundedCities(cords) {
@@ -119,10 +111,10 @@ async function getBoundedCities(cords) {
 
 	let data, result
 	if (map.getView().getZoom() <= 5) {
-		result = await fetch(`https://overpass-api.de/api/interpreter?data=[out:json];(node["place"="country"](${Slat},${Slng},${Nlat},${Nlng});way["place"="country"](${Slat},${Slng},${Nlat},${Nlng}););out body 15;`)
+		result = await fetch(`https://overpass-api.de/api/interpreter?data=[out:json];node["place"="country"](${Slat},${Slng},${Nlat},${Nlng});out body 10;`)
 		data = await result.json()
 	} else {
-		result = await fetch(`https://overpass-api.de/api/interpreter?data=[out:json];(node["place"="city"](${Slat},${Slng},${Nlat},${Nlng});way["place"="city"](${Slat},${Slng},${Nlat},${Nlng}););out body 15;`)
+		result = await fetch(`https://overpass-api.de/api/interpreter?data=[out:json];node["place"="city"](${Slat},${Slng},${Nlat},${Nlng});out body 10;`)
 		data = await result.json()
 	}
 	return data
@@ -140,17 +132,79 @@ function applyLayer() {
 	}
 }
 // wide View
-document.querySelector(".wide-view").onclick =_=>map.getView().setZoom(0)
+document.querySelector(".wide-view").onclick = _ => map.getView().setZoom(0)
 // layer switcher
 let layerSwitcher = document.querySelector(".layerSwitcher")
-layerSwitcher.addEventListener("click",_=>{
-	if (lastLayer === lightLayer || lastLayer === darkLayer){
+layerSwitcher.addEventListener("click", _ => {
+	if (lastLayer === lightLayer || lastLayer === darkLayer) {
 		lightLayer.setVisible(false)
 		darkLayer.setVisible(false)
 		ReaLayer.setVisible(true)
 		lastLayer = ReaLayer
-	}else{
+	} else {
 		ReaLayer.setVisible(false)
 		applyLayer()
 	}
+})
+////////////////         large CITIES          ///////////////
+let chosedCities = []
+async function displayRandCities() {
+	chosedCities = []
+	for (let i = 0; i < 3; i++) {
+		let city = biggestCities[Math.floor(Math.random() * biggestCities.length)]
+		while (chosedCities.includes(city)) {
+			city = biggestCities[Math.floor(Math.random() * biggestCities.length)]
+		}
+		chosedCities.push(city)
+		let cityData = await getSimpleDataByName(city)
+		let box = document.querySelector(".cities").children[i]
+		box.querySelector(".country").innerHTML = cityData.location.country
+		box.querySelector(".city-name").innerHTML = cityData.location.name
+		box.querySelector(".condition").innerHTML = cityData.current.condition.text
+		box.querySelector(".weatherImage").src = mainWeatherConditions[mode][cityData.current.condition.code]
+		box.querySelector(".temp").innerHTML = Math.round(cityData.current.temp_c) + "°"
+		box.classList.add(city.split(" ").join("-"))
+		box.querySelector(".weatherImage").dataset.code = cityData.current.condition.code
+	}
+}
+displayRandCities()
+// update cities according to the mode
+function UpdateCities() {
+	chosedCities.forEach(city => {
+		let weatherImage = document.querySelector(`.cities .box.${city} .weatherImage`)
+		if (weatherImage) weatherImage.src = mainWeatherConditions[mode][weatherImage.dataset.code]
+	})
+}
+// search new data according to box content (on click)
+let citiesBoxes = document.querySelectorAll(".cities .box")
+citiesBoxes.forEach(box => {
+	box.addEventListener("mousedown", _ => {
+		UpdateMidle(box.querySelector(".country").innerHTML)
+		UpdateLower(box.querySelector(".country").innerHTML)
+		displayRandCities()
+	})
+})
+
+// sliding on drag
+let slider = document.querySelector(".cities")
+let drag = false
+let startY
+let scrollTop
+slider.addEventListener("mousedown", e => {
+	drag = true
+	e.preventDefault()
+	startY = e.offsetY - slider.offsetTop
+	scrollTop = slider.scrollTop
+})
+window.addEventListener("mouseup", e => {
+	drag = false
+})
+slider.addEventListener("mouseleave", e => {
+	drag = false
+})
+slider.addEventListener("mousemove", e => {
+	if (!drag) return
+	e.preventDefault()
+	let walk = e.offsetY - slider.offsetTop - startY
+	slider.scrollTop = scrollTop - walk
 })

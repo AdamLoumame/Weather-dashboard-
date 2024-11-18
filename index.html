@@ -12,7 +12,7 @@
 		<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
 
 		<!-- map -->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.2.1/ol.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.2.1/ol.css" />
 
 		<!-- icons -->
 		<link rel="icon" href="/images/weather/big images/ghost.png" />
@@ -20,12 +20,12 @@
 		<script src="https://kit.fontawesome.com/ab3056bc7e.js" crossorigin="anonymous"></script>
 		<title>Weather DashBoard</title>
 	</head>
-	<body> 
+	<body>
 		<!-- header -->
 		<header>
 			<div class="left-part">
 				<div class="icons">
-					<a href="" class="more"><i class="fa-solid fa-house"></i></a>
+					<a href="" class="more"><i class="material-icons">more_vert</i></a>
 					<a href="" class="more"><i class="fa-solid fa-bell"></i></a>
 					<div class="location">
 						<i class="fa-solid fa-location-dot"></i>
@@ -35,6 +35,8 @@
 				<div class="search">
 					<i class="material-icons search-button">radio_button_unchecked</i>
 					<input type="text" placeholder="Search City..." class="search-bar" />
+					<div class="separator"></div>
+					<ul class="suggestions"></ul>
 				</div>
 			</div>
 			<div class="right-part">
@@ -47,7 +49,6 @@
 				</div>
 			</div>
 		</header>
-
 		<!-- error-404 -->
 		<div class="error-404">
 			<div class="container">
@@ -60,6 +61,7 @@
 				<p class="message"><span>Oops</span><span>...</span> <span>sorry</span> <span>page</span> <span>not</span> <span>found</span></p>
 			</div>
 		</div>
+		<!-- loader -->
 		<div class="loader">
 			<div class="container">
 				<span class="droplet"></span>
@@ -200,15 +202,72 @@
 					<button class="layerSwitcher"><span class="material-icons">layers</span></button>
 				</div>
 			</div>
-			<div class="right"></div>
+			<div class="right">
+				<div class="head">
+					<h4>Other Large Cities</h4>
+					<a href="cities.html">Show All <span>></span></a>
+				</div>
+				<div class="cities">
+					<div class="box">
+						<div class="text">
+							<span class="country"></span>
+							<span class="city-name"></span>
+							<span class="condition"></span>
+						</div>
+						<div class="info">
+							<img src="" alt="" class="weatherImage" data-code />
+							<div class="temp"></div>
+						</div>
+					</div>
+					<div class="box">
+						<div class="text">
+							<span class="country"></span>
+							<span class="city-name"></span>
+							<span class="condition"></span>
+						</div>
+						<div class="info">
+							<img src="" alt="" class="weatherImage" data-code />
+							<div class="temp"></div>
+						</div>
+					</div>
+					<div class="box">
+						<div class="text">
+							<span class="country"></span>
+							<span class="city-name"></span>
+							<span class="condition"></span>
+						</div>
+						<div class="info">
+							<img src="" alt="" class="weatherImage" data-code />
+							<div class="temp"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- tools -->
+		<div class="tools">
+			<div class="container">
+				<div class="nav">
+					<div class="menu">
+						<span>Main</span>
+						<i class="material-icons">home</i>
+					</div>
+					<div class="menu">
+						<span>Statistics</span>
+						<i class="material-icons">bar_chart</i>
+					</div>
+				</div>
+				<div class="settings"></div>
+			</div>
 		</div>
 		<!-- CNDS -->
 		<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1"></script>
 		<script src="https://cdn.jsdelivr.net/npm/ol@v10.2.1/dist/ol.js"></script>
 		<!-- modules -->
-		<script type="module" src="modes.js"></script>
+		<script type="module" src="search.js"></script>
 		<script type="module" src="api.js"></script>
 		<script type="module" src="midle.js"></script>
 		<script type="module" src="lower.js"></script>
+		<script type="module" src="modes.js"></script>
 	</body>
 </html>
