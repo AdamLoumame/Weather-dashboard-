@@ -5,12 +5,14 @@ export async function getData(place) {
 		const mainResult = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=0bb3890e2cdc4fbabd5164832240711&q=${place}&days=7&aqi=yes`)
 		if (mainResult.ok) {
 			let mainData = await mainResult.json()
-			const forecastResult = await fetch(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${mainData.location.lat}&lon=${mainData.location.lon}&key=97d94974f1714a23a352b9af69855e9e`)
-			if (forecastResult.ok) {
+			const forecastResult = await fetch(`https://api.weatherbit.io/v2.0/forecast/daily?lat=${mainData.location.lat}&lon=${mainData.location.lon}&key=6d97b2068b2f4922882cbd355afe7294`)
+			const hoursForecastResult = await fetch(`https://api.weatherbit.io/v2.0/forecast/hourly?lat=${mainData.location.lat}&lon=${mainData.location.lon}&key=6d97b2068b2f4922882cbd355afe7294`)
+			if (forecastResult.ok && hoursForecastResult.ok) {
 				hideError()
 				let forecastData = await forecastResult.json()
+				let hourForecastData = await hoursForecastResult.json()
 				hideLoader()
-				return [mainData, forecastData]
+				return [mainData, forecastData, hourForecastData]
 			} else {
 				catchStatus(forecastResult)
 			}

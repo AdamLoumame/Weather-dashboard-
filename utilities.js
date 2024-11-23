@@ -3,9 +3,15 @@ export function datetoName(date) {
 }
 export function getBoxData(box, iterableData) {
 	let result
-	iterableData.forEach(dayData => {
-		if (datetoName(dayData.datetime) === box.classList[1]) {
-			result = dayData
+	iterableData.forEach(elementData => {
+		if (datetoName(elementData.datetime) === box.classList[1]) {
+			result = elementData
+		}else if(elementData.timestamp_local){
+			let time = Number(elementData.timestamp_local.slice(11, 13))
+			let comparands = time > 12 ? `${time - 12}PM` : time + "AM"
+			if (comparands===box.classList[1]){
+				result = elementData
+			}
 		}
 	})
 	return result
@@ -43,4 +49,7 @@ export function uvColor(rate) {
 	} else {
 		return ["#7A1CAC", "#7A1CAC4d"]
 	}
+}
+export function convert12From(time){
+	return time > 12 ? `${time - 12}PM` : time + "AM"
 }

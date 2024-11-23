@@ -180,6 +180,26 @@ export const forecastWeatherConditions = {
 		900: "/images/weather/white mode/week rain.png"
 	},
 }
+export let nightImages= {
+	light : {
+		1003 : "/images/weather/white mode/night/Group 6.png",
+		1006 : "/images/weather/white mode/night/Group 6.png",
+		1204 : "/images/weather/white mode/night/Group 5.png",
+		801 : "/images/weather/white mode/night/Group 6.png",
+		802 : "/images/weather/white mode/night/Group 5.png",
+		800 : "/images/weather/simboles/Group 1214.png",
+		1000 : "/images/weather/simboles/Group 1214.png",
+	},
+	dark : {
+		1003 : "/images/weather/dark mode/night/Group 6.png",
+		1006 : "/images/weather/dark mode/night/Group 6.png",
+		1204 : "/images/weather/dark mode/night/Group 5.png",
+		801 : "/images/weather/dark mode/night/Group 6.png",
+		802 : "/images/weather/dark mode/night/Group 5.png",
+		800 : "/images/weather/simboles/Group 1214.png",
+		1000 : "/images/weather/simboles/Group 1214.png",
+	}
+}
 export const maxAirValues = {
 	PM2_5: 180,
 	PM10: 300,
