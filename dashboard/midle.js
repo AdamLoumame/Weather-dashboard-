@@ -32,8 +32,8 @@ document.querySelectorAll(".date").forEach(date => {
 })
 
 // imports
-import {datetoName, getBoxData, airColor, uvColor, getTime, convert12From} from "../utilities.js"
-import {mainWeatherConditions, aqiImage, maxAirValues, forecastWeatherConditions, nightImages} from "../dicts.js"
+import {datetoName, getBoxData, airColor, uvColor, getTime, convert12From ,filterImage} from "../utilities.js"
+import {mainWeatherConditions, aqiImage, maxAirValues, forecastWeatherConditions} from "../dicts.js"
 import {getData} from "../api.js" // main fetching function
 // default
 export function getUserCords() {
@@ -43,7 +43,7 @@ export function getUserCords() {
         succ => resolve(`${succ.coords.latitude} ${succ.coords.longitude}`),
         fail => resolve("london")
       )
-    }else{
+    } else {
       resolve("london")
     }
   })
@@ -60,6 +60,7 @@ export function updateImagePack() {
 // Updating
 export async function UpdateMidle(value = "") {
   ;[data, weekData, hoursData] = await getData(value) // new data !
+  weatherType = document.querySelector(".tools .container .settings .wind").classList[1] ? "wind" : "normal" 
   forecastType = document.querySelector(".forecast-type").classList[1]
   let lastActiveIndex = Array.from(document.querySelector(".midle .left-part .main.week").children).indexOf(document.querySelector(".day.active"))
   displayWeek() // displaying fetched data and creating new boxes
@@ -79,75 +80,58 @@ export async function UpdateMidle(value = "") {
   // changing to a new name city on the DOM
   document.querySelector("header .left-part .location .loc-name").innerHTML = `${data.location.name}, <span>${data.location.country}</span>`
 }
+let weatherType = document.querySelector(".tools .container .settings .wind").classList[1] ? "wind" : "normal" // normal or wind
 let windImage = "/images/weather/simboles/arrow.png"
-let weatherType = "normal" // normal or wind
 ////////////////         Today + Tommorow          ///////////////
 function showDay(box, data, data2) {
-  // infos vary taking care of today or tomorrow
-  // infos to show to the user for data ( left / right )
-  let temp, tempClass // getting correct temp unit ( value )
-  if (box.children.length > 0 && box.children[2].children[0].classList.contains("F")) {
-    temp = Math.round(data.temp_f ? data.temp_f : data.avgtemp_f) + " °F"
-    tempClass = "F"
-  } else {
-    temp = Math.round(data.temp_c ? data.temp_c : data.avgtemp_c) + " °C"
-    tempClass = "C"
-  }
-  let vis = data.vis_km ? data.vis_km : data.avgvis_km
-  let humidity = data.humidity ? data.humidity : data.avghumidity
-  let uv = data.uv
-  let wind = data.wind_kph ? data.wind_kph : data.maxwind_kph
-  let text = data.condition.text
-
   // infos to show to the user for data2 ( class : more )
-  let current = data.wind_kph ? true : false
-  let dateNumbers = data2.last_updated ? data2.last_updated : data2.time
-  let date = current ? "Current" : `${dateNumbers.slice(8, 10)} ${new Date(dateNumbers.slice(5, 7)).toLocaleString("en", {month: "short"})} ${dateNumbers.slice(0, 4)}`
-  // setting thev img based on the theme / mode and text
+  let date = data.wind_kph ? "Current" : `${data2.time.slice(8, 10)} ${new Date(data2.time.slice(5, 7)).toLocaleString("en", {month: "short"})} ${data2.time.slice(0, 4)}`
+  // setting the img based on the theme / mode and text
   let img = filterImage(data.condition.code, data.is_day, mainWeatherConditions)
-  console.log(data)
-  if (weatherType==="wind"){
+  let text = data.condition.text
+  // wind data changing 
+  if (weatherType === "wind") {
     img = windImage
+    text = data.wind_kph ? Math.ceil(data.wind_kph) + " Km/h" : Math.ceil(weekData.data[1].wind_spd * 3.6) + " Km/h"
   }
-  // setting vis img
   let visImg
   if (data.is_day === undefined) {
-    visImg = "/images/weather/big images/vis2.png"
+    visImg = "/images/weather/big-images/vis2.png"
   } else {
-    visImg = "/images/weather/big images/vis.png"
+    visImg = "/images/weather/big-images/vis.png"
   }
-  // filling 
+  // filling
   box.innerHTML = `
 					<div class="day-bg">
-						<img src="/images/weather/big images/sun.png" class="sun">
+						<img src="/images/weather/big-images/sun.png" class="sun">
 						<div class="wave"></div>
 						<div class="wave1"></div>
 						<div class="wave2"></div>
 					</div>
 					<div class="night-bg">
-						<img src="/images/weather/big images/moon.png" alt="" class="moon">
+						<img src="/images/weather/big-images/moon.png" alt="" class="moon">
 					</div>
 					<div class="left">
-						<div class="temperature ${tempClass}">${temp}</div>
+						<div class="temperature C">${Math.round(data.temp_c ? data.temp_c : data.avgtemp_c)} °C</div>
 						<div class="infos">
 							<div class="box humidity">
-								<img src="/images/weather/big images/wind.png" alt="" class="icon">
-								<span class="value">${Math.round(humidity)} %</span>
+								<img src="/images/weather/big-images/wind.png" alt="" class="icon">
+								<span class="value">${Math.round(data.humidity ? data.humidity : data.avghumidity)} %</span>
 								<span class="text">Humidity</span>
 							</div>
 							<div class="box vis">
 								<img src="${visImg}" alt="" class="icon">
-								<span class="value">${Math.round(vis)} Km/h</span>
+								<span class="value">${Math.round(data.vis_km ? data.vis_km : data.avgvis_km)} Km/h</span>
 								<span class="text">Visibility</span>
 							</div>
 							<div class="box uv">
-								<img src="/images/weather/big images/uv.png" alt="" class="icon">
-								<span class="value">${Math.round(uv)}</span>
+								<img src="/images/weather/big-images/uv.png" alt="" class="icon">
+								<span class="value">${Math.round(data.uv)}</span>
 								<span class="text">Ultraviolet</span>
 							</div>
 							<div class="box wind">
 								<img src="/images/weather/simboles/wind.png" alt="" class="icon">
-								<span class="value">${Math.round(wind)} Km/h</span>
+								<span class="value">${Math.round(data.wind_kph ? data.wind_kph : data.maxwind_kph)} Km/h</span>
 								<span class="text">Wind Speed</span>
 							</div>
 						</div>
@@ -177,6 +161,9 @@ function showDay(box, data, data2) {
 							<span class="description">${text}</span>
 						</div>
 					</div> `
+  if (weatherType === "wind") {
+    box.querySelector(".right .image .weatherImage").style.transform = `rotateZ(${data.wind_degree ? data.wind_degree : weekData.data[1].wind_dir}deg)`
+  }
   // day / night chages
   if (data.is_day !== undefined) {
     dayChanges(box, data.is_day)
@@ -185,7 +172,7 @@ function showDay(box, data, data2) {
   // creating and placing stars randomly
   for (let i = 0; i < 3; i++) {
     let star = document.createElement("img")
-    star.src = "/images/weather/big images/star.png"
+    star.src = "/images/weather/big-images/star.png"
     star.classList.add("star")
     document.querySelector(".night-bg").appendChild(star)
   }
@@ -215,14 +202,6 @@ function dayChanges(box, isDay) {
 export function UpdateBoxImage(box) {
   let boxImage = box.querySelector(".right .image .weatherImage")
   boxImage.src = filterImage(boxImage.dataset.condition, boxImage.dataset.isday, mainWeatherConditions)
-}
-export function filterImage(code, is_day, imagesDic) {
-  let img = imagesDic[imagePack][code]
-  let absurdeCodes = [1003, 1006, 1204, 801, 802, 800, 1000]
-  if (absurdeCodes.includes(code) && !is_day && is_day !== "undefined" && is_day !== undefined) {
-    img = nightImages[imagePack][code]
-  }
-  return img
 }
 // default today / tommorow
 showDay(document.querySelector(".main.today"), data.current, data.current)
@@ -284,9 +263,10 @@ function displayWeek() {
     const boxDay = document.createElement("div")
     boxDay.innerHTML = `
         <span class="abr">${shortLabel}</span>
-        <img src="${filterImage(elementData.weather.code, is_day, forecastWeatherConditions)}" alt="" class="weather-img" />
-        <div class="temp">${Math.round(elementData.temp)}°</div>
+        <img src="${weatherType === "wind" ? windImage : filterImage(elementData.weather.code, is_day, forecastWeatherConditions)}" alt="" class="weather-img" />
+        <div class="temp">${weatherType === "wind" ? Math.ceil(elementData.wind_spd * 3.6) : Math.round(elementData.temp)}<span class="unit">${weatherType === "wind" ?" Km/h":" °C"}</span></div>
         `
+    if (weatherType === "wind") boxDay.querySelector(".weather-img").style.transform = `translate(-50%, -40%) rotate(${elementData.wind_dir}deg)`
     boxDay.classList.add("day", label, shortLabel)
     document.querySelector(".midle .left-part .main.week").appendChild(boxDay)
   })
@@ -309,7 +289,7 @@ addBoxInteractions() // making default boxes interactive
 function makeActive(box) {
   box.classList.add("active")
   // getting right forecast data type to get this box's data from
-  let rightInfo1, rightInfo2, rightInfo1Name, rightInfo2Name,is_day
+  let rightInfo1, rightInfo2, rightInfo1Name, rightInfo2Name, is_day
   let forecastData = gettingForecastData()
 
   let data = getBoxData(box, forecastData)
@@ -340,12 +320,12 @@ function makeActive(box) {
                 <div class="temp">${Math.round(data.temp)}°</div>
                 <div class="info">
                     <p>Real Feel<span class="number"> : ${Math.round(data.app_max_temp ? (data.app_max_temp + data.min_temp) / 2 : data.app_temp)}°</span></p>
-                    <p>Wind<span class="number"> : ${Math.round(data.wind_spd * 3.6)} Km/h</span></p>
+                    <p>Wind<span class="number"> : ${Math.ceil(data.wind_spd * 3.6)} Km/h</span></p>
                     <p>Pressure<span class="number"> : ${Math.round(data.pres)}MB</span></p>
                     <p>Humidity<span class="number"> : ${Math.round(data.rh)}%</span></p></div>
                 </div>
             <div class="rigth">
-                <img src="${filterImage(data.weather.code,is_day,forecastWeatherConditions)}" alt="" class="weather-img"/>
+                <img src="${weatherType === "wind" ? windImage : filterImage(data.weather.code, is_day, forecastWeatherConditions)}" alt="" class="weather-img"/>
                 <div class="info">
                     <p>${rightInfo1Name}<span class="number"> : ${rightInfo1}</span></p>
                     <p>${rightInfo2Name}<span class="number"> : ${rightInfo2}</span></p>
@@ -353,6 +333,9 @@ function makeActive(box) {
             </div>
         </div>
     `
+  if (weatherType === "wind") {
+    box.querySelector(".weather-img").style.transform = `translate(-50%, -40%) rotateZ(${data.wind_dir}deg)`
+  }
 }
 makeActive(document.querySelectorAll(".day")[0]) // default active
 
@@ -361,7 +344,7 @@ function resetBoxes() {
   let boxes = document.querySelectorAll(".midle .left-part .main.week .day")
   boxes.forEach(box => {
     box.classList.remove("active")
-    // getting right box data 
+    // getting right box data
     let forecastData
     let is_day = 1
     if (forecastType === "days") {
@@ -370,13 +353,14 @@ function resetBoxes() {
       forecastData = hoursData.data.slice(0, 7)
     }
     let finalData = getBoxData(box, forecastData)
-    if (finalData.pod==="n"&&forecastType==="hours") is_day = 0
+    if (finalData.pod === "n" && forecastType === "hours") is_day = 0
 
     box.innerHTML = `
             <span class="abr">${box.classList[2] ? box.classList[2] : box.classList[1]}</span>
-            <img src="${filterImage(finalData.weather.code,is_day,forecastWeatherConditions)}" alt="" class="weather-img" />
-            <div class="temp">${Math.round(finalData.temp)}°</div>
+            <img src="${weatherType === "wind" ? windImage : filterImage(finalData.weather.code, is_day, forecastWeatherConditions)}" alt="" class="weather-img" />
+            <div class="temp">${weatherType === "wind" ? Math.ceil(finalData.wind_spd * 3.6) : Math.round(finalData.temp)}<span class="unit">${weatherType === "wind" ?" Km/h":" °C"}</span></div>
         `
+    if (weatherType === "wind") box.querySelector(".weather-img").style.transform = `translate(-50%, -40%) rotate(${finalData.wind_dir}deg)`
   })
 }
 
@@ -467,7 +451,9 @@ function uvForecast(uvData) {
       progress.parentElement.style.backgroundColor = uvColor(uvValue)[1]
       progress.parentElement.parentElement.children[1].children[0].innerHTML = uvValue
       if (forecastType === "days") {
-        progress.parentElement.parentElement.children[1].children[1].innerHTML = ` ${new Date(elementData.datetime.slice(5, 7)).toLocaleString("en", {month: "short"})} ${elementData.datetime.slice(8, 10)}`
+        progress.parentElement.parentElement.children[1].children[1].innerHTML = ` ${new Date(elementData.datetime.slice(5, 7)).toLocaleString("en", {
+          month: "short",
+        })} ${elementData.datetime.slice(8, 10)}`
       } else {
         progress.parentElement.parentElement.children[1].children[1].innerHTML = ` ${convert12From(Number(elementData.timestamp_local.slice(11, 13)))}`
       }

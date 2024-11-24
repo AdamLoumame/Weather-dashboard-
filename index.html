@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v10.2.1/ol.css" />
 
     <!-- icons -->
-    <link rel="icon" href="/images/weather/big images/ghost.png" />
+    <link rel="icon" href="/images/weather/big-images/ghost.png" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <title>Weather DashBoard</title>
   </head>
@@ -43,13 +43,13 @@
           <i class="light material-icons" style="margin-left: -2px">wb_sunny</i>
           <i class="dark material-icons active" style="margin-right: -3px">bedtime</i>
         </div>
-        <img src="images/weather/big images/ghost.png" alt="" class="ghost" />
+        <img src="images/weather/big-images/ghost.png" alt="" class="ghost" />
       </div>
     </header>
     <!-- error-404 -->
     <div class="error-404">
       <div class="container">
-        <img src="./images/weather/big images/sun.png" alt="" class="sun" />
+        <img src="./images/weather/big-images/sun.png" alt="" class="sun" />
         <div class="fours">
           <span>4</span>
           <span>0</span>
@@ -191,7 +191,7 @@
       <div class="left">
         <div class="head">
           <h4>Global Map</h4>
-          <span class="wide-view">View wide <img src="/images/weather/big images/stars.png" /></span>
+          <span class="wide-view">View wide <img src="/images/weather/big-images/stars.png" /></span>
         </div>
         <div class="mapError"></div>
         <div id="map">
@@ -213,7 +213,7 @@
             </div>
             <div class="info">
               <img src="" alt="" class="weatherImage" data-code />
-              <div class="temp"></div>
+              <div class="temp"><span class="value"></span><span class="unit"></span></div>
             </div>
           </div>
           <div class="box">
@@ -224,7 +224,7 @@
             </div>
             <div class="info">
               <img src="" alt="" class="weatherImage" data-code />
-              <div class="temp"></div>
+              <div class="temp"><span class="value"></span><span class="unit"></span></div>
             </div>
           </div>
           <div class="box">
@@ -235,7 +235,7 @@
             </div>
             <div class="info">
               <img src="" alt="" class="weatherImage" data-code />
-              <div class="temp"></div>
+              <div class="temp"><span class="value"></span><span class="unit"></span></div>
             </div>
           </div>
         </div>
@@ -253,32 +253,33 @@
             <span>Statistics</span>
             <i class="material-icons">bar_chart</i>
           </a>
-          <a class="menu" href="cities.html">
-            <span>Cities</span>
-            <i class="material-icons">read_more</i>
-          </a>
         </div>
         <div class="settings">
           <div class="title">
             <h1>Options</h1>
             <i class="material-icons">settings</i>
           </div>
-          <div class="shadows"><span>Shadows</span> <img src="/images/weather/big images/stars.png" class="shadowImage" /></div>
+          <div class="shadows"><span>Shadows</span> <img src="/images/weather/big-images/stars.png" class="shadowImage" /></div>
           <div class="forecast-type days">
             <span>Forecast Type</span>
             <div class="choices">
-              <img src="/images/weather/big images/calendar.png" class="forecastTypeChoice active" />
-              <img src="/images/weather/big images/clock.png" class="forecastTypeChoice" />
+              <img src="/images/weather/big-images/calendar.png" class="forecastTypeChoice active" />
+              <img src="/images/weather/big-images/clock.png" class="forecastTypeChoice" />
             </div>
           </div>
           <div class="fullScreen small">
             <span>Full Screen</span>
-            <img src="/images/weather/simboles/full screen.png" alt="" class="fullScreenImage" />
+            <img src="/images/weather/simboles/full-screen.png" alt="" class="fullScreenImage" />
           </div>
           <div class="wind">
             <span>Wind Data</span>
+            <img src="/images/weather/simboles/dark-mode-wind.png" alt="" class="windChoice" />
+          </div>
+          <div class="temp-unit C">
+            <span>Temperature Unit</span>
             <div class="choices">
-              <img src="/images/weather/simboles/dark mode wind.png" alt="" class="windChoice" />
+              <span class="unit">F</span>
+              <span class="unit">C</span>
             </div>
           </div>
         </div>

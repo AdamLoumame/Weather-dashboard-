@@ -182,7 +182,7 @@ header .left-part .search .suggestions li {
   display: flex;
   align-items: center;
   cursor: pointer;
-  transition: 0.3s;
+  transition: background-color 0.2s;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
   position: relative;
 }
@@ -520,11 +520,15 @@ header .right-part .ghost {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -40%);
+  transition: .3s;
 }
 .midle .left-part .main.week .day .temp {
   font-size: 1.8rem;
   font-family: var(--number-font);
   transition: 0.3s;
+}
+.midle .left-part .main.week .day .temp .unit{
+  font-size: .7rem;
 }
 /* active day */
 .midle .left-part .main.week .day.active {
@@ -602,7 +606,6 @@ header .right-part .ghost {
   position: absolute;
   top: 2rem;
   right: 1rem;
-  transform: translate(-50%, -40%);
 }
 /* air */
 .main-air {
@@ -876,7 +879,6 @@ header .right-part .ghost {
 .left-part .main.today .right .image .weatherImage,
 .left-part .main.tomorrow .right .image .weatherImage {
   width: 8rem;
-  cursor: pointer;
 }
 .left-part .main.today .right .image .weatherImage:hover + .description,
 .left-part .main.tomorrow .right .image .weatherImage:hover + .description {
@@ -898,7 +900,7 @@ header .right-part .ghost {
   text-align: center;
   opacity: 0;
   transition: 0.3s;
-  cursor: pointer;
+  pointer-events: none;
 }
 .left-part .main.today .right .image .description:hover,
 .left-part .main.tomorrow .right .image .description:hover {
@@ -969,7 +971,7 @@ header .right-part .ghost {
 }
 .wave {
   position: absolute;
-  background-image: url("/images/weather/big images/wave.png");
+  background-image: url("/images/weather/big-images/wave.png");
   background-repeat: repeat-x;
   background-position: 0 100%;
   background-size: 1000px 120px;
@@ -983,7 +985,7 @@ header .right-part .ghost {
 }
 .wave1 {
   position: absolute;
-  background-image: url("/images/weather/big images/wave.png");
+  background-image: url("/images/weather/big-images/wave.png");
   background-repeat: repeat-x;
   background-position: 0 100%;
   background-size: 1000px 120px;
@@ -997,7 +999,7 @@ header .right-part .ghost {
 }
 .wave2 {
   position: absolute;
-  background-image: url("/images/weather/big images/wave.png");
+  background-image: url("/images/weather/big-images/wave.png");
   background-repeat: repeat-x;
   background-position: 0 100%;
   background-size: 1000px 120px;
@@ -1320,7 +1322,10 @@ header .right-part .ghost {
   text-align: center;
   font-size: 1.5rem;
 }
-
+.lower .right .cities .box .info .temp .unit{
+  font-size: .5rem;
+  margin-left: 5px;
+}
 /* tools */
 .tools {
   position: fixed;
@@ -1413,37 +1418,54 @@ header .right-part .ghost {
   display: flex;
   flex-direction: column;
 }
-.tools .container .settings .forecast-type .choices {
+.tools .container .settings .forecast-type .choices,
+.tools .container .settings .temp-unit .choices{
   margin-top: 20px;
   display: flex;
   justify-content: flex-end;
   gap: 10px;
 }
-.tools .container .settings .forecast-type .forecastTypeChoice {
+.tools .container .settings .forecast-type .forecastTypeChoice,
+.tools .container .settings .temp-unit .choices .unit{
   width: 3rem;
   border-radius: var(--border-radius);
   padding: 5px;
-  transition: .3s;
+  transition: 0.3s;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+.tools .container .settings .temp-unit .choices .unit::before{
+  display: none;
 }
 .tools .container .settings .forecast-type.hours .forecastTypeChoice:last-of-type,
-.tools .container .settings .forecast-type.days .forecastTypeChoice:first-of-type{
+.tools .container .settings .forecast-type.days .forecastTypeChoice:first-of-type,
+.tools .container .settings .temp-unit.F .choices .unit:first-of-type,
+.tools .container .settings .temp-unit.C .choices .unit:last-of-type{
   background-color: var(--bg-color);
+  color: var(--main-text-color);
 }
 .tools .container .settings .fullScreen,
-.tools .container .settings .wind{
+.tools .container .settings .wind {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.tools .container .settings .fullScreen .fullScreenImage{
+.tools .container .settings .fullScreen .fullScreenImage {
   width: 3rem;
 }
-.tools .container .settings .wind .windChoice{
+.tools .container .settings .wind .windChoice {
   border-radius: var(--border-radius);
-  transition: .3s;
-  width:3.2rem;
+  transition: 0.3s;
+  width: 3.2rem;
 }
-.tools .container .settings .wind.active .windChoice{
-  padding: .3rem;
+.tools .container .settings .wind.active .windChoice {
+  padding: 0.3rem;
   background-color: var(--bg-color);
+}
+.tools .container .settings .temp-unit{
+  display: flex;
+  flex-direction: column;
 }

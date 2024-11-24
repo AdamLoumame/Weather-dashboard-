@@ -61,7 +61,7 @@ function dark() {
   document.documentElement.style.setProperty("--border-color", "#292929")
   document.documentElement.style.setProperty("--info-color", "#bbd7ec")
    // settings wind change image 
-  document.querySelector(".tools .container .settings .wind .windChoice").src = "/images/weather/simboles/dark mode wind.png"
+  document.querySelector(".tools .container .settings .wind .windChoice").src = "/images/weather/simboles/dark-mode-wind.png"
   // saving last mode in localStorage
   localStorage.setItem("mode", "dark")
 
@@ -85,7 +85,7 @@ function light() {
   document.documentElement.style.setProperty("--border-color", "#dcdcdc")
   document.documentElement.style.setProperty("--info-color", "#91c3e9")
   // settings wind change image 
-  document.querySelector(".tools .container .settings .wind .windChoice").src = "/images/weather/simboles/white mode wind.png"
+  document.querySelector(".tools .container .settings .wind .windChoice").src = "/images/weather/simboles/white-mode-wind.png"
   // saving last mode in localStorage
   localStorage.setItem("mode", "light")
 

@@ -1,3 +1,4 @@
+import { nightImages } from "./dicts.js"
 export function datetoName(date) {
 	return new Date(date).toLocaleDateString("en", {weekday: "long"})
 }
@@ -52,4 +53,13 @@ export function uvColor(rate) {
 }
 export function convert12From(time){
 	return time > 12 ? `${time - 12}PM` : time + "AM"
+}
+export function filterImage(code, is_day, imagesDic) {
+	let imagePack = document.querySelector(".mode").classList[1] // dark or light
+	let img = imagesDic[imagePack][code]
+	let absurdeCodes = [1003, 1006, 1204, 801, 802, 800, 1000]
+	if (absurdeCodes.includes(code) && !is_day && is_day !== "undefined" && is_day !== undefined) {
+	  img = nightImages[imagePack][code]
+	}
+	return img
 }

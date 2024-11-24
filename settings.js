@@ -1,4 +1,5 @@
-import {UpdateMidle} from "./dashboard/midle.js"
+import {updateImagePack, UpdateMidle} from "./dashboard/midle.js"
+import { updateCitiesWeather } from "./dashboard/lower.js"
 let toolButton = document.querySelector(".toolsIcon")
 let tools = document.querySelector(".tools")
 // ( un / ) displaying
@@ -31,13 +32,15 @@ shadowsOption.addEventListener("click", _ => {
 })
 
 /*
-1) wind yes no options 
-2) dots chart (precip forecast) settings.js
+1) wind yes no options  (partial done)
 4) copyright rules on the bottom of settings.js
-5) getting loc and showing user loc data 
-
+5) stats
+6) api handling catching and so on
 
 */
+
+
+
 // forecast type
 let forecastOption = document.querySelector(".forecast-type")
 forecastOption.children[0].addEventListener("click", _ => {
@@ -55,29 +58,50 @@ forecastOption.children[0].addEventListener("click", _ => {
 })
 // full screen
 let fullScreenOption = document.querySelector(".fullScreen")
-fullScreenOption.children[0].addEventListener("click", _ => {
+function fullScreen(){
   if (fullScreenOption.classList.contains("full")) {
     if (document.exitFullscreen) {
       fullScreenOption.classList.add("small")
       fullScreenOption.classList.remove("full")
       document.exitFullscreen()
-      fullScreenOption.children[1].src = "/images/weather/simboles/full screen.png"
+      fullScreenOption.children[1].src = "/images/weather/simboles/full-screen.png"
     }
   } else {
     if (document.documentElement.requestFullscreen) {
       fullScreenOption.classList.add("full")
       fullScreenOption.classList.remove("small")
       document.documentElement.requestFullscreen()
-      fullScreenOption.children[1].src = "/images/weather/simboles/minimized screen.png"
+      fullScreenOption.children[1].src = "/images/weather/simboles/minimized-screen.png"
     }
   }
+}
+document.addEventListener("keyup",e=>{
+  if (e.key==="F11") e.preventDefault()
+})
+fullScreenOption.children[0].addEventListener("click", _ => {
+  fullScreen()
 })
 // wind 
 let windOption = document.querySelector(".tools .container .settings .wind")
 windOption.children[0].addEventListener("click",_=>{
   if (windOption.classList.contains("active")){
     windOption.classList.remove("active")
+    UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
+    updateCitiesWeather()
   }else{
     windOption.classList.add("active")
+    UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
+    updateCitiesWeather()
+  }
+})
+// temperature unit 
+let tempOption = document.querySelector(".temp-unit")
+tempOption.children[0].addEventListener("click",_=>{
+  if (tempOption.classList.contains("F")){
+    tempOption.classList.remove("F")
+    tempOption.classList.add("C")
+  }else{
+    tempOption.classList.add("F")
+    tempOption.classList.remove("C")
   }
 })

@@ -1,7 +1,8 @@
-import {getSimpleDataByCords, getSimpleDataByName} from "../api.js"
+import {getData, getSimpleDataByCords, getSimpleDataByName} from "../api.js"
 import {mainWeatherConditions, biggestCities} from "../dicts.js"
-import {getUserCords, filterImage} from "./midle.js"
+import {getUserCords} from "./midle.js"
 import {bigUpdate} from "../search.js"
+import { filterImage } from "../utilities.js"
 
 // default
 let defaultPlace = await getUserCords()
@@ -9,7 +10,7 @@ let data = await getSimpleDataByName(defaultPlace) // default data that will be 
 // Updating
 export async function UpdateLower(value = "") {
   mode = document.querySelector(".mode").classList[1]
-  UpdateCities()
+  UpdateCitiesImage()
   if (lastLayer !== ReaLayer) {
     applyLayer()
   }
@@ -28,7 +29,7 @@ let map = new ol.Map({
   view: new ol.View({
     center: ol.proj.fromLonLat([data.location.lon, data.location.lat]),
     zoom: 10,
-    minZoom: 2,
+    minZoom: 3,
     maxZoom: 18,
   }),
   target: "map",
@@ -184,7 +185,7 @@ function applyLayer() {
   }
 }
 // wide View
-document.querySelector(".wide-view").onclick = _ => map.getView().setZoom(0)
+document.querySelector(".wide-view").onclick = _ => map.getView().animate({zoom:0,center:[0,0],duration: 1000,})
 // layer switcher
 let layerSwitcher = document.querySelector(".layerSwitcher")
 layerSwitcher.addEventListener("click", _ => {
@@ -198,9 +199,11 @@ layerSwitcher.addEventListener("click", _ => {
     applyLayer()
   }
 })
-////////////////         large CITIES          ///////////////
+////////////////         large CITIES additionals infos         ///////////////
 let chosedCities = []
-async function displayRandCities() {
+let windImage = "/images/weather/simboles/arrow.png"
+export async function displayRandCities() {
+  let weatherType = document.querySelector(".tools .container .settings .wind").classList[1] ? "wind" : "normal"
   chosedCities = []
   for (let i = 0; i < 3; i++) {
     let city = biggestCities[Math.floor(Math.random() * biggestCities.length)]
@@ -210,28 +213,50 @@ async function displayRandCities() {
     chosedCities.push(city)
     let cityData = await getSimpleDataByName(city)
     let box = document.querySelector(".cities").children[i]
+    box.querySelector(".weatherImage").style.transform = "" // init from a rotation
     box.classList.remove(box.classList[1])
     box.querySelector(".country").innerHTML = cityData.location.country
     box.querySelector(".city-name").innerHTML = cityData.location.name
     box.querySelector(".condition").innerHTML = cityData.current.condition.text
-    box.querySelector(".weatherImage").src = filterImage(cityData.current.condition.code, cityData.current.is_day, mainWeatherConditions)
-    box.querySelector(".temp").innerHTML = Math.round(cityData.current.temp_c) + "°"
-    box.classList.add(`${city.split(" ").join("-")},${cityData.location.country.split(" ").join("-")}`)
+    box.querySelector(".weatherImage").src = weatherType==="wind"?windImage:filterImage(cityData.current.condition.code, cityData.current.is_day, mainWeatherConditions)
+    box.querySelector(".temp .value").innerHTML = weatherType==="wind"?Math.ceil(cityData.current.wind_kph):Math.round(cityData.current.temp_c)
+    box.querySelector(".temp .unit").innerHTML = weatherType==="wind"?"Km/h":"°C"
+    if (weatherType==="wind") box.querySelector(".weatherImage").style.transform = `rotateZ(${cityData.current.wind_degree}deg)`
+    box.classList.add(`${city.split(" ").join("-")}-${cityData.location.country.split(" ").join("-")}`)
     box.querySelector(".weatherImage").dataset.code = cityData.current.condition.code
   }
 }
 displayRandCities()
+// change image while changing weather type ( wind / normal ) 
+export function updateCitiesWeather(){
+  let weatherType = document.querySelector(".tools .container .settings .wind").classList[1] ? "wind" : "normal"
+  Array.from(document.querySelector(".cities").children).forEach(async city=>{
+    let cityData = await getSimpleDataByName(city.classList[1])
+    if (weatherType==="wind"){
+      city.querySelector(".weatherImage").src = windImage
+      city.querySelector(".weatherImage").style.transform = `rotateZ(${cityData.current.wind_degree}deg)`
+      city.querySelector(`.temp .value`).innerHTML = Math.ceil(cityData.current.wind_kph)
+      city.querySelector(`.temp .unit`).innerHTML = "Km/h"
+    }else{
+      city.querySelector(".weatherImage").src = filterImage(cityData.current.condition.code, cityData.current.is_day, mainWeatherConditions)
+      city.querySelector(".weatherImage").style.transform = ""
+      city.querySelector(`.temp .value`).innerHTML = Math.round(cityData.current.temp_c)
+      city.querySelector(`.temp .unit`).innerHTML = "°C"
+    }
+  })
+}
 // update cities according to the mode
-function UpdateCities() {
-  chosedCities.forEach(city => {
-    let weatherImage = document.querySelector(`.cities .box.${city} .weatherImage`)
-    if (weatherImage) weatherImage.src = mainWeatherConditions[mode][weatherImage.dataset.code]
+function UpdateCitiesImage() {
+  let weatherType = document.querySelector(".tools .container .settings .wind").classList[1] ? "wind" : "normal"
+  Array.from(document.querySelector(".cities").children).forEach(city=>{
+    let weatherImage = city.querySelector(`.weatherImage`)
+    if (weatherImage && weatherType==="normal") weatherImage.src = mainWeatherConditions[mode][weatherImage.dataset.code]
   })
 }
 // search new data according to box content (on click)
 let citiesBoxes = document.querySelectorAll(".cities .box")
 citiesBoxes.forEach(box => {
-  box.addEventListener("mousedown", _ => {
+  box.addEventListener("mousedown",async _ => {
     bigUpdate(box.classList[1])
     displayRandCities()
   })
