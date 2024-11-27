@@ -51,7 +51,7 @@ export function uvColor(rate) {
 		return ["#7A1CAC", "#7A1CAC4d"]
 	}
 }
-export function convert12From(time){
+export function convert12form(time){
 	return time > 12 ? `${time - 12}PM` : time + "AM"
 }
 export function filterImage(code, is_day, imagesDic) {
@@ -63,3 +63,5 @@ export function filterImage(code, is_day, imagesDic) {
 	}
 	return img
 }
+export let toF = n => Math.round((n * 9) / 5 + 32)
+export let toC = n => Math.round(((n - 32) * 5) / 9)

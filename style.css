@@ -530,6 +530,14 @@ header .right-part .ghost {
 .midle .left-part .main.week .day .temp .unit{
   font-size: .7rem;
 }
+.midle .left-part .main.week .day.active .temp{
+  position: relative;
+}
+.midle .left-part .main.week .day.active .temp .unit{
+  position: absolute;
+  bottom: 9px;
+  right: 6px;
+}
 /* active day */
 .midle .left-part .main.week .day.active {
   flex-basis: 26.2%;
@@ -747,7 +755,7 @@ header .right-part .ghost {
   flex-direction: column-reverse;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
+  gap: 16px;
 }
 .main-air .UV-forecast .box {
   display: flex;
@@ -1311,7 +1319,7 @@ header .right-part .ghost {
 }
 .lower .right .cities .box .info .weatherImage {
   width: 3rem;
-  transition: 0.3s;
+  transition: scale 0.3s;
   pointer-events: all;
 }
 .lower .right .cities .box .info .weatherImage:hover {

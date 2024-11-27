@@ -1,15 +1,13 @@
 import {UpdateLower} from "../dashboard/lower.js"
 import {UpdateMidle} from "../dashboard/midle.js"
 import {continents} from "./dicts.js"
+import { updateUnit } from "./settings.js"
 
 let searchBar = document.querySelector(".search-bar")
 let searchButton = document.querySelector(".search-button")
 // search listeners
-// search listeners
 searchButton.addEventListener("click", e => {
-  if (searchBar.value) {
-    bigUpdate(searchBar.value)
-  }
+  if (searchBar.value) bigUpdate(searchBar.value),resetSugg()
 })
 document.addEventListener("keyup", e => {
   if (searchBar.value && e.code === "Enter") {
@@ -20,6 +18,7 @@ document.addEventListener("keyup", e => {
     } else {
       bigUpdate(searchBar.value)
     }
+    resetSugg()
   }
 })
 
@@ -43,7 +42,7 @@ searchBar.addEventListener("input", async _ => {
     // display cities into suggestions box
     let suggBox = document.querySelector(".suggestions")
     suggBox.innerHTML = ""
-    console.log(suggBox.innerHTML)
+
     for (let place of citiesArr){
       let imagePack = document.querySelector(".mode").classList[1] // dark or light
       let continent = (await(await fetch(`https://restcountries.com/v3.1/name/${place.country.split(" ")[0]}?fields=continents`)).json())[0].continents[0]
@@ -64,6 +63,7 @@ searchBar.addEventListener("input", async _ => {
       // displaying data placing on clicking
       sugg.addEventListener("click", e => {
         bigUpdate(place.url)
+        resetSugg()
       })
     }
     // updaating current on the search bar
@@ -106,9 +106,12 @@ window.addEventListener("click", e => {
   }
 })
 // the BIG UPADATE function that regroupes all changes
-export function bigUpdate(value) {
-  UpdateMidle(value)
-  UpdateLower(value)
+export async function bigUpdate(value) {
+  await UpdateMidle(value)
+  await UpdateLower(value)
+  updateUnit()
+}
+function resetSugg(){
   searchBar.value = ""
   document.querySelector(".suggestions").innerHTML = ""
   current = -1

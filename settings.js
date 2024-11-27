@@ -1,5 +1,7 @@
-import {updateImagePack, UpdateMidle} from "./dashboard/midle.js"
+import {UpdateMidle} from "./dashboard/midle.js"
 import { updateCitiesWeather } from "./dashboard/lower.js"
+import { toC,toF } from "./utilities.js"
+
 let toolButton = document.querySelector(".toolsIcon")
 let tools = document.querySelector(".tools")
 // ( un / ) displaying
@@ -32,28 +34,30 @@ shadowsOption.addEventListener("click", _ => {
 })
 
 /*
-1) wind yes no options  (partial done)
+2) api handling catching and so on
+3) learn those opperators 
 4) copyright rules on the bottom of settings.js
 5) stats
-6) api handling catching and so on
-
+cilcking on to loc icon map go to it 
 */
 
 
 
 // forecast type
 let forecastOption = document.querySelector(".forecast-type")
-forecastOption.children[0].addEventListener("click", _ => {
+forecastOption.children[0].addEventListener("click",async _ => {
   if (forecastOption.classList.contains("days")) {
     forecastOption.classList.remove("days")
     forecastOption.classList.add("hours")
-    UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
+    await UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
     document.querySelector(".midle .left-part .info .dates .week").innerHTML = "Next 7 hours"
+    updateUnit()
   } else {
     forecastOption.classList.add("days")
     forecastOption.classList.remove("hours")
-    UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
+    await UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
     document.querySelector(".midle .left-part .info .dates .week").innerHTML = "Next 7 days"
+    updateUnit()
   }
 })
 // full screen
@@ -83,25 +87,53 @@ fullScreenOption.children[0].addEventListener("click", _ => {
 })
 // wind 
 let windOption = document.querySelector(".tools .container .settings .wind")
-windOption.children[0].addEventListener("click",_=>{
+windOption.children[0].addEventListener("click",async _=>{
   if (windOption.classList.contains("active")){
     windOption.classList.remove("active")
-    UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
-    updateCitiesWeather()
+    upWind()
   }else{
     windOption.classList.add("active")
-    UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
-    updateCitiesWeather()
+    upWind()
   }
 })
+async function upWind(){
+  await UpdateMidle(document.querySelector("header .left-part .location .loc-name").textContent.trim())
+  await updateCitiesWeather()
+  updateUnit()
+}
 // temperature unit 
 let tempOption = document.querySelector(".temp-unit")
 tempOption.children[0].addEventListener("click",_=>{
   if (tempOption.classList.contains("F")){
     tempOption.classList.remove("F")
     tempOption.classList.add("C")
+    changeUnitTemp("F")
   }else{
     tempOption.classList.add("F")
     tempOption.classList.remove("C")
+    changeUnitTemp("C")
   }
 })
+export function changeUnitTemp(unit){
+  let temps = [...document.querySelectorAll(".midle .left-part .main.week .day .temp"),document.querySelector(".midle .left-part .main.week .day.active .bottom .info p span"),...document.querySelectorAll('.lower .right .cities .box .info .temp'),...document.querySelectorAll(".left-part .main .left .temperature"),...document.querySelectorAll(".left-part .main .more .details .sec > div .value.temp")]
+  temps.forEach(temp=>{
+    if(temp.childElementCount === 0){
+      let number = temp.innerHTML.match(/-?\d+/)?.[0]
+      if (unit==="C" && temp.innerHTML.includes("C")) temp.innerHTML = temp.innerHTML.replace(number,toF(Number(number))),temp.innerHTML=temp.innerHTML.replace("C","F")
+      if (unit==="F" && temp.innerHTML.includes("F")) temp.innerHTML = temp.innerHTML.replace(number,toC(Number(number))),temp.innerHTML=temp.innerHTML.replace("F","C")
+    }else{
+      let number = temp.children[0].innerHTML.match(/-?\d+/)?.[0]
+      if (temp.children[1].innerHTML.includes("C") && unit ==="C"){
+        temp.children[0].innerHTML = temp.children[0].innerHTML.replace(number,toF(Number(number)))
+        temp.children[1].innerHTML = temp.children[1].innerHTML.replace("C","F")
+      }
+      if (temp.children[1].innerHTML.includes("F") && unit ==="F"){
+        temp.children[0].innerHTML = temp.children[0].innerHTML.replace(number,toC(Number(number)))
+        temp.children[1].innerHTML = temp.children[1].innerHTML.replace("F","C") 
+      }
+    }
+  })
+}
+export function updateUnit(){
+  if (tempOption.classList[1]==="F") changeUnitTemp("C") // retrive last unit 
+}

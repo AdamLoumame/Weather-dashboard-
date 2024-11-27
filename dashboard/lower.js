@@ -1,5 +1,5 @@
-import {getData, getSimpleDataByCords, getSimpleDataByName} from "../api.js"
-import {mainWeatherConditions, biggestCities} from "../dicts.js"
+import {getSimpleDataByCords, getSimpleDataByName} from "../api.js"
+import {mainWeatherConditions, biggestCities,aqiImage} from "../dicts.js"
 import {getUserCords} from "./midle.js"
 import {bigUpdate} from "../search.js"
 import { filterImage } from "../utilities.js"
@@ -14,13 +14,15 @@ export async function UpdateLower(value = "") {
   if (lastLayer !== ReaLayer) {
     applyLayer()
   }
-  displayWeather()
-  data = await getSimpleDataByName(value)
-  map.getView().animate({
-    center: ol.proj.fromLonLat([data.location.lon, data.location.lat]),
-    zoom: 12,
-    duration: 1500,
-  })
+  displayMapWeather()
+  if (value) {
+    data = await getSimpleDataByName(value)
+    map.getView().animate({
+      center: ol.proj.fromLonLat([data.location.lon, data.location.lat]),
+      zoom: 12,
+      duration: 1500,
+    })
+  }
 }
 ////////////////         MAP          ///////////////
 // markers group
@@ -77,9 +79,9 @@ map.addLayer(darkLayer)
 map.addLayer(lightLayer)
 // displaying weather condition and update while mvt occurs and clicking changes
 map.on("moveend", async _ => {
-  displayWeather()
+  displayMapWeather()
 })
-async function displayWeather() {
+async function displayMapWeather() {
   let places = (await getBoundedCities(map.getView().calculateExtent())).elements
   // remove unneeded markers and update places so alr there wont be replaced 
   markers.forEach(marker => {
@@ -101,54 +103,26 @@ async function displayWeather() {
           }),
         ],
       }),
-      style: getStyle("image", palceData.current.condition.code),
+      style: new ol.style.Style({
+        image: new ol.style.Icon({
+          src: mainWeatherConditions[mode][palceData.current.condition.code],
+          scale:.3
+        }),
+      }),
     })
-    marker
-      .getSource()
-      .getFeatures()[0]
-      .set("class", [[place.lat, place.lon], "image",palceData.current.condition.code])
+    marker.getSource().getFeatures()[0].set("class", [[place.lat, place.lon], "weather",palceData.current.condition.code])
     map.addLayer(marker)
     markers.push(marker)
   })
 }
-// on click on the marker switching between text and image
-map.on("singleclick", async e => {
-  let feature = map.forEachFeatureAtPixel(e.pixel, feature => feature)
-  if (feature) {
-    let palceData = await getSimpleDataByCords(...feature.get("class")[0])
-    if (feature.get("class")[1] === "image") {
-      feature.set("class", [feature.get("class")[0], "number"])
-      feature.setStyle(null)
-      feature.setStyle(getStyle("text", palceData.current.temp_c))
-    } else {
-      feature.set("class", [feature.get("class")[0], "image"])
-      feature.setStyle(null)
-      feature.setStyle(getStyle("image", palceData.current.condition.code))
-    }
-  }
-})
 // getting the style of the marker feature according to the type of it 
 function getStyle(type, filling) {
-  let style
-  if (type === "text") {
-    style = new ol.style.Style({
-      text: new ol.style.Text({
-        text: filling,
-        font: "16px Rubik, sans-serif",
-        fill: new ol.style.Fill({color: "#f7f7f7"}),
-        backgroundFill: new ol.style.Fill({ color: "transparent"}),
-        stroke: new ol.style.Stroke({color: '#111015', width: 2})
-      }),
-    })
-  } else {
-    style = new ol.style.Style({
-      image: new ol.style.Icon({
-        src: mainWeatherConditions[mode][filling],
-        scale: 0.3,
-      }),
-    })
-  }
-  return style
+  return new ol.style.Style({
+    image: new ol.style.Icon({
+      src: type==="aqi"?aqiImage[filling][0]:mainWeatherConditions[mode][filling],
+      imgSize: [20, 20]
+    }),
+  })
 }
 export function updateMarkersImages(){
   markers.forEach(marker=>{
@@ -163,7 +137,7 @@ async function getBoundedCities(cords) {
   let [Slng, Slat] = ol.proj.toLonLat([minX, minY])
 
   let data, result
-  if (map.getView().getZoom() <= 5) {
+  if (map.getView().getZoom() <= 4) {
     result = await fetch(`https://overpass-api.de/api/interpreter?data=[out:json];node["place"="country"](${Slat},${Slng},${Nlat},${Nlng});out body 10;`)
     data = await result.json()
   } else {
@@ -228,9 +202,9 @@ export async function displayRandCities() {
 }
 displayRandCities()
 // change image while changing weather type ( wind / normal ) 
-export function updateCitiesWeather(){
+export async function updateCitiesWeather(){
   let weatherType = document.querySelector(".tools .container .settings .wind").classList[1] ? "wind" : "normal"
-  Array.from(document.querySelector(".cities").children).forEach(async city=>{
+  for (let city of document.querySelector(".cities").children){
     let cityData = await getSimpleDataByName(city.classList[1])
     if (weatherType==="wind"){
       city.querySelector(".weatherImage").src = windImage
@@ -243,7 +217,7 @@ export function updateCitiesWeather(){
       city.querySelector(`.temp .value`).innerHTML = Math.round(cityData.current.temp_c)
       city.querySelector(`.temp .unit`).innerHTML = "°C"
     }
-  })
+  }
 }
 // update cities according to the mode
 function UpdateCitiesImage() {

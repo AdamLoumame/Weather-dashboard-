@@ -32,8 +32,9 @@ document.querySelectorAll(".date").forEach(date => {
 })
 
 // imports
-import {datetoName, getBoxData, airColor, uvColor, getTime, convert12From ,filterImage} from "../utilities.js"
+import {datetoName, getBoxData, airColor, uvColor, getTime, convert12form ,filterImage} from "../utilities.js"
 import {mainWeatherConditions, aqiImage, maxAirValues, forecastWeatherConditions} from "../dicts.js"
+import { updateUnit } from "../settings.js"
 import {getData} from "../api.js" // main fetching function
 // default
 export function getUserCords() {
@@ -63,7 +64,7 @@ export async function UpdateMidle(value = "") {
   weatherType = document.querySelector(".tools .container .settings .wind").classList[1] ? "wind" : "normal" 
   forecastType = document.querySelector(".forecast-type").classList[1]
   let lastActiveIndex = Array.from(document.querySelector(".midle .left-part .main.week").children).indexOf(document.querySelector(".day.active"))
-  displayWeek() // displaying fetched data and creating new boxes
+  displayForecast() // displaying fetched data and creating new boxes
   addBoxInteractions() // making new boxes interactive
   makeActive(document.querySelectorAll(".day")[lastActiveIndex]) // activate the first box
   // air changes
@@ -73,8 +74,6 @@ export async function UpdateMidle(value = "") {
   showDay(document.querySelector(".main.today"), data.current, data.current)
   // tommorow changes
   showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
-  // C <=> F
-  allConvertable()
   // graph of chances of rain
   showRainGraph()
   // changing to a new name city on the DOM
@@ -112,7 +111,7 @@ function showDay(box, data, data2) {
 						<img src="/images/weather/big-images/moon.png" alt="" class="moon">
 					</div>
 					<div class="left">
-						<div class="temperature C">${Math.round(data.temp_c ? data.temp_c : data.avgtemp_c)} °C</div>
+						<div class="temperature">${Math.round(data.temp_c ? data.temp_c : data.avgtemp_c)} °C</div>
 						<div class="infos">
 							<div class="box humidity">
 								<img src="/images/weather/big-images/wind.png" alt="" class="icon">
@@ -144,12 +143,12 @@ function showDay(box, data, data2) {
 								<div class="gust_mph">gust_mph : <span class="value">${Math.round(data2.gust_mph)} mph</span></div>
 								<div class="pressure_mb">pressure_mb : <span class="value">${Math.round(data2.pressure_mb)} MB</span></div>
 								<div class="pressure_in">pressure_in : <span class="value">${Math.round(data2.pressure_in)} in</span></div>
-								<div class="dewpoint">dewpoint : <span class="value C">${Math.round(data2.dewpoint_c)} °C</span></div>
+								<div class="dewpoint">dewpoint : <span class="value temp">${Math.round(data2.dewpoint_c)} °C</span></div>
 							</div>
 							<div class="sec">
-								<div class="heatindex">heatindex : <span class="value C">${Math.round(data2.heatindex_c)} °C</span></div>
-								<div class="feelslike">feelslike : <span class="value C">${Math.round(data2.feelslike_c)} °C</span></div>
-								<div class="windchill">windchill : <span class="value C">${Math.round(data2.windchill_c)} °C</span></div>
+								<div class="heatindex">heatindex : <span class="value temp">${Math.round(data2.heatindex_c)} °C</span></div>
+								<div class="feelslike">feelslike : <span class="value temp">${Math.round(data2.feelslike_c)} °C</span></div>
+								<div class="windchill">windchill : <span class="value temp">${Math.round(data2.windchill_c)} °C</span></div>
 								<div class="precip_in">precip_in : <span class="value">${Math.round(data2.precip_in)} in</span></div>
 								<div class="precip_mm">precip_mm : <span class="value">${Math.round(data2.precip_mm)} mm</span></div>
 							</div>
@@ -206,29 +205,6 @@ export function UpdateBoxImage(box) {
 // default today / tommorow
 showDay(document.querySelector(".main.today"), data.current, data.current)
 showDay(document.querySelector(".main.tomorrow"), data.forecast.forecastday[1].day, data.forecast.forecastday[1].hour[13])
-// C <=> F ( requires classes + has to be box (DOM el))
-function convertTemp(temp) {
-  temp.addEventListener("click", _ => {
-    if (temp.classList.contains("C")) {
-      temp.classList.remove("C")
-      temp.classList.add("F")
-      temp.innerHTML = `${Math.round((Number(temp.innerHTML.slice(0, -2)) * 9) / 5 + 32)} °F`
-    } else {
-      temp.classList.remove("F")
-      temp.classList.add("C")
-      temp.innerHTML = `${Math.round(((Number(temp.innerHTML.slice(0, -2)) - 32) * 5) / 9)} °C`
-    }
-  })
-}
-// all the time convert while click
-function allConvertable() {
-  document.querySelectorAll(".temperature").forEach(temp => convertTemp(temp))
-  document.querySelectorAll(".dewpoint").forEach(dewpoint => convertTemp(dewpoint.children[0]))
-  document.querySelectorAll(".feelslike").forEach(feelslike => convertTemp(feelslike.children[0]))
-  document.querySelectorAll(".windchill").forEach(windchill => convertTemp(windchill.children[0]))
-  document.querySelectorAll(".heatindex").forEach(heatindex => convertTemp(heatindex.children[0]))
-}
-allConvertable()
 ////////////////          forecast ( days / hours )          ///////////////
 let forecastType = document.querySelector(".forecast-type").classList[1]
 function gettingForecastData() {
@@ -239,7 +215,7 @@ function gettingForecastData() {
     return hoursData.data.slice(0, 7)
   }
 }
-function displayWeek() {
+function displayForecast() {
   document.querySelector(".midle .left-part .main.week").innerHTML = "" // clean the week box to add new data boxes
 
   // getting right loop over forecast data ( days or hours )
@@ -251,7 +227,7 @@ function displayWeek() {
     let label, shortLabel, is_day
     if (forecastType === "hours") {
       let time = Number(elementData.timestamp_local.slice(11, 13))
-      label = convert12From(time)
+      label = convert12form(time)
       shortLabel = label
       is_day = elementData.pod === "d" ? 1 : 0
     } else {
@@ -264,14 +240,14 @@ function displayWeek() {
     boxDay.innerHTML = `
         <span class="abr">${shortLabel}</span>
         <img src="${weatherType === "wind" ? windImage : filterImage(elementData.weather.code, is_day, forecastWeatherConditions)}" alt="" class="weather-img" />
-        <div class="temp">${weatherType === "wind" ? Math.ceil(elementData.wind_spd * 3.6) : Math.round(elementData.temp)}<span class="unit">${weatherType === "wind" ?" Km/h":" °C"}</span></div>
+        <div class="temp"><span class="value">${weatherType === "wind" ? Math.ceil(elementData.wind_spd * 3.6) : Math.round(elementData.temp)}</span><span class="unit">${weatherType === "wind" ?" Km/h":" °C"}</span></div>
         `
     if (weatherType === "wind") boxDay.querySelector(".weather-img").style.transform = `translate(-50%, -40%) rotate(${elementData.wind_dir}deg)`
     boxDay.classList.add("day", label, shortLabel)
     document.querySelector(".midle .left-part .main.week").appendChild(boxDay)
   })
 }
-displayWeek() // display the default data
+displayForecast() // display the default data
 
 // add events to the days so can be activate or unactivate (as a function so new created days can also be manupilated)
 function addBoxInteractions() {
@@ -280,6 +256,7 @@ function addBoxInteractions() {
     box.addEventListener("click", _ => {
       resetBoxes()
       makeActive(box)
+      updateUnit()
     })
   })
 }
@@ -317,11 +294,11 @@ function makeActive(box) {
         </div>
         <div class="bottom">
             <div class="left">
-                <div class="temp">${Math.round(data.temp)}°</div>
+                <div class="temp"><span class="value">${Math.round(data.temp)}°</span><span class="unit">C</span></div>
                 <div class="info">
-                    <p>Real Feel<span class="number"> : ${Math.round(data.app_max_temp ? (data.app_max_temp + data.min_temp) / 2 : data.app_temp)}°</span></p>
+                    <p>Real Feel<span class="number"> : ${Math.round(data.app_max_temp ? (data.app_max_temp + data.min_temp) / 2 : data.app_temp)}°C</span></p>
                     <p>Wind<span class="number"> : ${Math.ceil(data.wind_spd * 3.6)} Km/h</span></p>
-                    <p>Pressure<span class="number"> : ${Math.round(data.pres)}MB</span></p>
+                    <p>Pressure<span class="number"> : ${Math.round(data.slp)}MB</span></p>
                     <p>Humidity<span class="number"> : ${Math.round(data.rh)}%</span></p></div>
                 </div>
             <div class="rigth">
@@ -358,7 +335,7 @@ function resetBoxes() {
     box.innerHTML = `
             <span class="abr">${box.classList[2] ? box.classList[2] : box.classList[1]}</span>
             <img src="${weatherType === "wind" ? windImage : filterImage(finalData.weather.code, is_day, forecastWeatherConditions)}" alt="" class="weather-img" />
-            <div class="temp">${weatherType === "wind" ? Math.ceil(finalData.wind_spd * 3.6) : Math.round(finalData.temp)}<span class="unit">${weatherType === "wind" ?" Km/h":" °C"}</span></div>
+            <div class="temp"><span class="value">${weatherType === "wind" ? Math.ceil(finalData.wind_spd * 3.6) : Math.round(finalData.temp)}</span><span class="unit">${weatherType === "wind" ?" Km/h":" °C"}</span></div>
         `
     if (weatherType === "wind") box.querySelector(".weather-img").style.transform = `translate(-50%, -40%) rotate(${finalData.wind_dir}deg)`
   })
@@ -455,7 +432,7 @@ function uvForecast(uvData) {
           month: "short",
         })} ${elementData.datetime.slice(8, 10)}`
       } else {
-        progress.parentElement.parentElement.children[1].children[1].innerHTML = ` ${convert12From(Number(elementData.timestamp_local.slice(11, 13)))}`
+        progress.parentElement.parentElement.children[1].children[1].innerHTML = ` ${convert12form(Number(elementData.timestamp_local.slice(11, 13)))}`
       }
       i++
     }
@@ -475,7 +452,7 @@ export function showRainGraph() {
     let date, is_day
     if (forecastType === "hours") {
       let time = Number(elementData.timestamp_local.slice(11, 13))
-      date = convert12From(time)
+      date = convert12form(time)
       is_day = elementData.pod === "d" ? 1 : 0
     } else {
       date = datetoName(elementData.datetime.slice(0, 11)).slice(0, 3)
