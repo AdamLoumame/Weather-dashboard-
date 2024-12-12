@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="style.css" />
+		<link rel="stylesheet" href="normalize.css" />
+		<!-- font -->
+		<link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
+
+		<!-- CDN -->
+		<script defer src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+		<!-- icons -->
+		<link rel="icon" href="/images/weather/big-images/ghost.png" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+		<title>Weather Stats</title>
+	</head>
+	<body>
+		<!-- header -->
+		<header class="stats-heading">
+			<div class="icons">
+				<a href="#" class="more toolsIcon"><i class="material-icons">more_vert</i></a>
+				<a href="" class="more"><i class="material-icons">notifications</i></a>
+				<div class="location">
+					<i class="material-icons">location_on</i>
+					<span class="loc-name"><span>Loading...</span></span>
+				</div>
+			</div>
+			<div class="search">
+				<i class="material-icons search-button">radio_button_unchecked</i>
+				<input type="text" placeholder="Search City..." class="search-bar" />
+				<div class="separator"></div>
+				<ul class="suggestions"></ul>
+			</div>
+			<div class="mode dark">
+				<i class="light material-icons" style="margin-left: -4px">wb_sunny</i>
+				<i class="dark material-icons active" style="margin-right: -4px">bedtime</i>
+			</div>
+		</header>
+		<!-- error-404 -->
+		<div class="error-404">
+			<div class="container">
+				<img src="./images/weather/big-images/sun.png" alt="" class="sun" />
+				<div class="fours">
+					<span>4</span>
+					<span>0</span>
+					<span>4</span>
+				</div>
+				<p class="message">
+					<span>Oops</span><span>...</span> <span>sorry</span> <span>page</span> <span>not</span>
+					<span>found</span>
+				</p>
+			</div>
+		</div>
+		<!-- loader -->
+		<div class="loader">
+			<div class="container">
+				<span class="droplet"></span>
+				<span class="droplet"></span>
+				<span class="droplet"></span>
+			</div>
+		</div>
+		<!-- main chart -->
+		<div class="main-chart">
+			<div class="top">
+				<div class="weather-type-options temp">
+					<span class="temp active">Temperature</span>
+					<span class="wind">Wind</span>
+					<span class="precip">Precipitations</span>
+				</div>
+				<div class="forecast-options days">
+					<span class="days active">Days</span>
+					<span class="hours">hours</span>
+				</div>
+			</div>
+			<div class="container">
+				<div class="empty-chart-label"></div>
+				<div class="info-labels"></div>
+				<div id="chart"></div>
+			</div>
+		</div>
+		<!-- bottom -->
+		<div class="bottom">
+			<div class="bar-chart">
+				<h4>UV Index Outlook</h4>
+				<div class="container">
+					<div class="empty-uv-chart-label"></div>
+					<div class="labels"></div>
+					<div id="uv-chart"></div>
+				</div>
+			</div>
+		</div>
+		<!-- tools -->
+		<div class="tools">
+			<div class="container">
+				<div class="nav">
+					<a class="menu" href="index.html">
+						<span>Dashboard</span>
+						<i class="material-icons">home</i>
+					</a>
+					<a class="menu active">
+						<span>Statistics</span>
+						<i class="material-icons">bar_chart</i>
+					</a>
+				</div>
+				<div class="settings">
+					<div class="title">
+						<h1>Options</h1>
+						<i class="material-icons">settings</i>
+					</div>
+					<div class="view-mode">
+						<span>View Mode</span>
+						<img src="/images/weather/simboles/view-mode.png" class="view-modeChoice" />
+					</div>
+					<div class="temp-unit C">
+						<span>Temperature Unit</span>
+						<div class="choices">
+							<span class="unit">F</span>
+							<span class="unit">C</span>
+						</div>
+					</div>
+					<!-- CopyRight -->
+				</div>
+			</div>
+		</div>
+		<!-- modul es -->
+		<script type="module" src="/statistics/mainChart.js"></script>
+		<script type="module" src="/statistics/additionalCharts.js"></script>
+		<script type="module" src="search.js"></script>
+		<script type="module" src="modes.js"></script>
+		<script type="module" src="settings.js"></script>
+	</body>
+</html>
